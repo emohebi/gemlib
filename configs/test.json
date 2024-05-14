@@ -1,0 +1,114 @@
+{
+  "cwd": "C:/Users/EM2945/Documents/CWD/test_gemlib",
+  "data": {
+    "BG1": {
+      "type": "sql",
+      "connection_string": "Driver={SQL Server}; Server=DRPSQLES10.DATASOURCES.NETWORK; Database={BurningGlass345};Trusted_Connection=yes;",
+      "query": "WITH filtered_BG_FLOW as (Select * from [BurningGlass345].[BGVIEW].[BG_FLOW] WHERE HOURLY_SALARY_MAX is not Null),filtered_SKILS as (Select JOB_POSTING_ID as ID, SKILL_NAME, IS_SPECIALISED, IS_BASELINE, IS_SOFTWARE from [BurningGlass345].[BGVIEW].[SKILLS] Where JOB_POSTING_ID in (Select DISTINCT(JOB_POSTING_ID) from [BurningGlass345].[BGVIEW].[BG_FLOW] WHERE HOURLY_SALARY_MAX is not Null)) Select top 20000 * from filtered_SKILS Inner join filtered_BG_FLOW on filtered_BG_FLOW.JOB_POSTING_ID=filtered_SKILS.ID"
+    },
+    "BG2": {
+      "type": "sql",
+      "connection_string": "Driver={SQL Server}; Server=DRPSQLES10.DATASOURCES.NETWORK; Database={BurningGlass345};Trusted_Connection=yes;",
+      "query": "WITH filtered_BG_FLOW as (Select * from [BurningGlass345].[BGVIEW].[BG_FLOW] WHERE HOURLY_SALARY_MAX is not Null),filtered_SKILS as (Select JOB_POSTING_ID as ID, SKILL_NAME, IS_SPECIALISED, IS_BASELINE, IS_SOFTWARE from [BurningGlass345].[BGVIEW].[SKILLS] Where JOB_POSTING_ID in (Select DISTINCT(JOB_POSTING_ID) from [BurningGlass345].[BGVIEW].[BG_FLOW] WHERE HOURLY_SALARY_MAX is not Null))Select top 20000 * from filtered_SKILS Inner join filtered_BG_FLOW on filtered_BG_FLOW.JOB_POSTING_ID=filtered_SKILS.ID"
+    },
+    "Anzco": {
+      "type": "sql",
+      "connection_string": "Driver={SQL Server}; Server=DRPSQLES10.DATASOURCES.NETWORK; Database={BurningGlass345};Trusted_Connection=yes;",
+      "query": "SELECT * FROM [BurningGlass345].[BGVIEW].[ANZSCO]"
+    },
+    "c1": {
+      "type": "concat",
+      "keys": ["BG1", "BG2"]
+    },
+    "j1": {
+      "type": "join",
+      "keys": {
+        "c1": "ANZSCO_CODE",
+        "Anzco": "ANZSCO_CODE"
+      },
+      "how": "left",
+      "dtypes": {
+        "EXPERIENCE_MIN": "float"
+      },
+      "fillna": {
+        "TITLE": "None",
+        "BGT_OCC_NAME": "None",
+        "ANZSCO_CODE": "0",
+        "ANZSCO_SUB_MAJOR_DESC": "None",
+        "SKILL_LEVEL": "0",
+        "ANZSCO_MINOR_DESC": "None",
+        "JOB_TYPE": "None",
+        "JOB_HOURS": "None",
+        "EXPERIENCE_MIN":  "MEAN"
+      }
+    }
+  },
+  "tasks": {
+    "t1": {
+      "type": "regression",
+      "algorithm": "random_forest",
+      "target": "HOURLY_SALARY_MAX",
+      "preprocessing": {
+        "p1": {
+          "process": "filter",
+          "type": "column",
+          "columns": [
+            "SKILL_NAME",
+            "IS_SPECIALISED",
+            "IS_BASELINE",
+            "IS_SOFTWARE",
+            "TITLE",
+            "EMPLOYER",
+            "ANZSCO_CODE",
+            "INTERMEDIARY",
+            "EXPERIENCE_MIN",
+            "CANON_JOB_TITLE",
+            "HOURLY_SALARY_MAX",
+            "LABOUR_MARKET_REGION",
+            "JOB_HOURS",
+            "JOB_TYPE",
+            "INTERNSHIP",
+            "BGT_OCC_NAME",
+            "SOURCE",
+            "JOB_POSTING_ID",
+            "ANZSCO_SUB_MAJOR_DESC",
+            "SKILL_LEVEL",
+            "ANZSCO_MINOR_DESC"
+          ]
+        },
+        "p2": {
+          "process": "featureengineering",
+          "type": "embedding",
+          "column": "SKILL_NAME",
+          "groupby": [ "JOB_POSTING_ID" ],
+          "embedding_dim": "50",
+          "embedding_path": "C:/Users/EM2945/Documents/BurningGlass_Seniority/glove.6B/glove.6B.50d.txt",
+          "num_vocabs": "3000"
+        },
+        "p3": {
+          "process": "featureengineering",
+          "type": "aggregation",
+          "groupby": [ "SKILL_NAME" ],
+          "definition": {
+            "EXPERIENCE_MIN": { "EXP_MIN": "MEAN" }
+          }
+        },
+        "p4": {
+          "process": "featureengineering",
+          "type": "one_hot_encoding",
+          "columns": ["JOB_TYPE"]
+        },
+        "p5": {
+          "process": "filter",
+          "type": "column",
+          "columns": [
+            "p2*",
+            "p3*",
+            "p4*",
+            "HOURLY_SALARY_MAX"
+          ]
+        }
+      }
+    }
+  }
+}

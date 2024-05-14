@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.visualization package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="gemlib.validation package" href="gemlib.validation.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemlib.abstarct.html">gemlib.abstarct package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.classification.html">gemlib.classification package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.dataloaderlayer.html">gemlib.dataloaderlayer package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.framework.html">gemlib.framework package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemlib.visualization package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.barplots">gemlib.visualization.barplots module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.boxplots">gemlib.visualization.boxplots module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.cmapsetup">gemlib.visualization.cmapsetup module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.engine">gemlib.visualization.engine module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.facetgridplot">gemlib.visualization.facetgridplot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.hcaplot">gemlib.visualization.hcaplot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.heatmaps">gemlib.visualization.heatmaps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.hexbins">gemlib.visualization.hexbins module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.histogram">gemlib.visualization.histogram module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.lineplots">gemlib.visualization.lineplots module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.networkplot">gemlib.visualization.networkplot module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.scatterplotmatrix">gemlib.visualization.scatterplotmatrix module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization.scatterplots">gemlib.visualization.scatterplots module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.visualization">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+      <li>gemlib.visualization package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.visualization.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-visualization-package">
+<h1>gemlib.visualization package<a class="headerlink" href="#gemlib-visualization-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.visualization.barplots">
+<span id="gemlib-visualization-barplots-module"></span><h2>gemlib.visualization.barplots module<a class="headerlink" href="#module-gemlib.visualization.barplots" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.barplots.BarPlotting">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.barplots.</code><code class="sig-name descname">BarPlotting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/barplots.html#BarPlotting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.barplots.BarPlotting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.barplots.BarPlotting.bar">
+<code class="sig-name descname">bar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_labels</span></em>, <em class="sig-param"><span class="n">y_values</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">dirpath</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rot_angle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/barplots.html#BarPlotting.bar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.barplots.BarPlotting.bar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.barplots.BarPlotting.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/barplots.html#BarPlotting.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.barplots.BarPlotting.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="gemlib.visualization.barplots.bar">
+<code class="sig-prename descclassname">gemlib.visualization.barplots.</code><code class="sig-name descname">bar</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/barplots.html#bar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.barplots.bar" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.boxplots">
+<span id="gemlib-visualization-boxplots-module"></span><h2>gemlib.visualization.boxplots module<a class="headerlink" href="#module-gemlib.visualization.boxplots" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.boxplots.BoxPlotting">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.boxplots.</code><code class="sig-name descname">BoxPlotting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/boxplots.html#BoxPlotting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.boxplots.BoxPlotting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.boxplots.BoxPlotting.add_meta_and_save">
+<code class="sig-name descname">add_meta_and_save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/boxplots.html#BoxPlotting.add_meta_and_save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.boxplots.BoxPlotting.add_meta_and_save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.boxplots.BoxPlotting.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/boxplots.html#BoxPlotting.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.boxplots.BoxPlotting.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.cmapsetup">
+<span id="gemlib-visualization-cmapsetup-module"></span><h2>gemlib.visualization.cmapsetup module<a class="headerlink" href="#module-gemlib.visualization.cmapsetup" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gemlib.visualization.cmapsetup.CustomCmap">
+<code class="sig-prename descclassname">gemlib.visualization.cmapsetup.</code><code class="sig-name descname">CustomCmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">from_rgb</span></em>, <em class="sig-param"><span class="n">to_rgb</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">'custom_cmap'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/cmapsetup.html#CustomCmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.cmapsetup.CustomCmap" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="gemlib.visualization.cmapsetup.setup">
+<code class="sig-prename descclassname">gemlib.visualization.cmapsetup.</code><code class="sig-name descname">setup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/cmapsetup.html#setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.cmapsetup.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.engine">
+<span id="gemlib-visualization-engine-module"></span><h2>gemlib.visualization.engine module<a class="headerlink" href="#module-gemlib.visualization.engine" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.engine.VisualizationEngine">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.engine.</code><code class="sig-name descname">VisualizationEngine</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">artifact_folder</span></em>, <em class="sig-param"><span class="n">set_logger</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/engine.html#VisualizationEngine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.engine.VisualizationEngine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.framework.html#gemlib.framework.knowledgediscovery.Discovery" title="gemlib.framework.knowledgediscovery.Discovery"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.framework.knowledgediscovery.Discovery</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.engine.VisualizationEngine.writetofile">
+<code class="sig-name descname">writetofile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/engine.html#VisualizationEngine.writetofile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.engine.VisualizationEngine.writetofile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.facetgridplot">
+<span id="gemlib-visualization-facetgridplot-module"></span><h2>gemlib.visualization.facetgridplot module<a class="headerlink" href="#module-gemlib.visualization.facetgridplot" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.facetgridplot.Drilldownplot">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.facetgridplot.</code><code class="sig-name descname">Drilldownplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/facetgridplot.html#Drilldownplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.facetgridplot.Drilldownplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.facetgridplot.Drilldownplot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/facetgridplot.html#Drilldownplot.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.facetgridplot.Drilldownplot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.hcaplot">
+<span id="gemlib-visualization-hcaplot-module"></span><h2>gemlib.visualization.hcaplot module<a class="headerlink" href="#module-gemlib.visualization.hcaplot" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gemlib.visualization.hcaplot.plot_dendogram">
+<code class="sig-prename descclassname">gemlib.visualization.hcaplot.</code><code class="sig-name descname">plot_dendogram</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_dim_data</span></em>, <em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">dirpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/hcaplot.html#plot_dendogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.hcaplot.plot_dendogram" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.heatmaps">
+<span id="gemlib-visualization-heatmaps-module"></span><h2>gemlib.visualization.heatmaps module<a class="headerlink" href="#module-gemlib.visualization.heatmaps" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.heatmaps.</code><code class="sig-name descname">CustomHeatMaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps.get_matrix">
+<code class="sig-name descname">get_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps.get_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps.get_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps.plot_matrix">
+<code class="sig-name descname">plot_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">matrix</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps.plot_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps.plot_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps.std_x_bounds">
+<code class="sig-name descname">std_x_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps.std_x_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps.std_x_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.CustomHeatMaps.std_y_bounds">
+<code class="sig-name descname">std_y_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#CustomHeatMaps.std_y_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.CustomHeatMaps.std_y_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.visualization.heatmaps.HeatMaps">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.heatmaps.</code><code class="sig-name descname">HeatMaps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#HeatMaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.HeatMaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.heatmaps.HeatMaps.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/heatmaps.html#HeatMaps.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.heatmaps.HeatMaps.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.hexbins">
+<span id="gemlib-visualization-hexbins-module"></span><h2>gemlib.visualization.hexbins module<a class="headerlink" href="#module-gemlib.visualization.hexbins" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.hexbins.HexbinPlot">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.hexbins.</code><code class="sig-name descname">HexbinPlot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/hexbins.html#HexbinPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.hexbins.HexbinPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.hexbins.HexbinPlot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/hexbins.html#HexbinPlot.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.hexbins.HexbinPlot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.histogram">
+<span id="gemlib-visualization-histogram-module"></span><h2>gemlib.visualization.histogram module<a class="headerlink" href="#module-gemlib.visualization.histogram" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.histogram.HistPlot">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.histogram.</code><code class="sig-name descname">HistPlot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/histogram.html#HistPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.histogram.HistPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.histogram.HistPlot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/histogram.html#HistPlot.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.histogram.HistPlot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.histogram.HistPlot.single_plot">
+<code class="sig-name descname">single_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/histogram.html#HistPlot.single_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.histogram.HistPlot.single_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.lineplots">
+<span id="gemlib-visualization-lineplots-module"></span><h2>gemlib.visualization.lineplots module<a class="headerlink" href="#module-gemlib.visualization.lineplots" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.lineplots.LinePlot">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.lineplots.</code><code class="sig-name descname">LinePlot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.multi_plot">
+<code class="sig-name descname">multi_plot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.multi_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.multi_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.save_fig">
+<em class="property">static </em><code class="sig-name descname">save_fig</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fig</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.save_fig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.save_fig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.set_lims">
+<code class="sig-name descname">set_lims</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ax</span></em>, <em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.set_lims"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.set_lims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.single_plot">
+<code class="sig-name descname">single_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.single_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.single_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlot.stacked_plot">
+<code class="sig-name descname">stacked_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlot.stacked_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlot.stacked_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.visualization.lineplots.LinePlotting">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.lineplots.</code><code class="sig-name descname">LinePlotting</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">legend</span></em>, <em class="sig-param"><span class="n">x_label</span></em>, <em class="sig-param"><span class="n">y_label</span></em>, <em class="sig-param"><span class="n">dirpath</span></em>, <em class="sig-param"><span class="n">figsize</span></em>, <em class="sig-param"><span class="n">fontsize</span></em>, <em class="sig-param"><span class="n">scatter_point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlotting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlotting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlotting.exclude_missing_values">
+<em class="property">static </em><code class="sig-name descname">exclude_missing_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_values</span></em>, <em class="sig-param"><span class="n">y_values</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlotting.exclude_missing_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlotting.exclude_missing_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlotting.multi_plots">
+<code class="sig-name descname">multi_plots</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">titles</span></em>, <em class="sig-param"><span class="n">legends</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlotting.multi_plots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlotting.multi_plots" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlotting.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlotting.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlotting.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.visualization.lineplots.LinePlotting.single_plot">
+<code class="sig-name descname">single_plot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/lineplots.html#LinePlotting.single_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.lineplots.LinePlotting.single_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.networkplot">
+<span id="gemlib-visualization-networkplot-module"></span><h2>gemlib.visualization.networkplot module<a class="headerlink" href="#module-gemlib.visualization.networkplot" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gemlib.visualization.networkplot.plot_network">
+<code class="sig-prename descclassname">gemlib.visualization.networkplot.</code><code class="sig-name descname">plot_network</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nodes</span></em>, <em class="sig-param"><span class="n">labels</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">dirpath</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/networkplot.html#plot_network"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.networkplot.plot_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.scatterplotmatrix">
+<span id="gemlib-visualization-scatterplotmatrix-module"></span><h2>gemlib.visualization.scatterplotmatrix module<a class="headerlink" href="#module-gemlib.visualization.scatterplotmatrix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.scatterplotmatrix.ScatterPlotMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.scatterplotmatrix.</code><code class="sig-name descname">ScatterPlotMatrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em>, <em class="sig-param"><span class="n">target</span></em>, <em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/scatterplotmatrix.html#ScatterPlotMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.scatterplotmatrix.ScatterPlotMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.scatterplotmatrix.ScatterPlotMatrix.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/scatterplotmatrix.html#ScatterPlotMatrix.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.scatterplotmatrix.ScatterPlotMatrix.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization.scatterplots">
+<span id="gemlib-visualization-scatterplots-module"></span><h2>gemlib.visualization.scatterplots module<a class="headerlink" href="#module-gemlib.visualization.scatterplots" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.visualization.scatterplots.ScatterPlot">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.visualization.scatterplots.</code><code class="sig-name descname">ScatterPlot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em>, <em class="sig-param"><span class="n">target</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/scatterplots.html#ScatterPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.scatterplots.ScatterPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter" title="gemlib.abstarct.basefunctionality.BasePlotter"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BasePlotter</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.visualization.scatterplots.ScatterPlot.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/scatterplots.html#ScatterPlot.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.scatterplots.ScatterPlot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="gemlib.visualization.scatterplots.scatter">
+<code class="sig-prename descclassname">gemlib.visualization.scatterplots.</code><code class="sig-name descname">scatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">columns</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">dirpath</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">decisionfun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predictproba</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/visualization/scatterplots.html#scatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.visualization.scatterplots.scatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.visualization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.visualization" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.validation.html" class="btn btn-neutral float-left" title="gemlib.validation package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

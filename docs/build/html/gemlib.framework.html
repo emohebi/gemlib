@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.framework package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib.regression package" href="gemlib.regression.html" />
+    <link rel="prev" title="gemlib.filtering package" href="gemlib.filtering.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemlib.abstarct.html">gemlib.abstarct package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.classification.html">gemlib.classification package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.dataloaderlayer.html">gemlib.dataloaderlayer package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemlib.framework package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.framework.knowledge">gemlib.framework.knowledge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.framework.knowledgediscovery">gemlib.framework.knowledgediscovery module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.framework.pipeline">gemlib.framework.pipeline module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.framework">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.visualization.html">gemlib.visualization package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+      <li>gemlib.framework package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.framework.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-framework-package">
+<h1>gemlib.framework package<a class="headerlink" href="#gemlib-framework-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.framework.knowledge">
+<span id="gemlib-framework-knowledge-module"></span><h2>gemlib.framework.knowledge module<a class="headerlink" href="#module-gemlib.framework.knowledge" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.framework.knowledge.BasicKnowledge">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.framework.knowledge.</code><code class="sig-name descname">BasicKnowledge</code><a class="reference internal" href="_modules/gemlib/framework/knowledge.html#BasicKnowledge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.knowledge.BasicKnowledge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.framework.knowledgediscovery">
+<span id="gemlib-framework-knowledgediscovery-module"></span><h2>gemlib.framework.knowledgediscovery module<a class="headerlink" href="#module-gemlib.framework.knowledgediscovery" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.framework.knowledgediscovery.Discovery">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.framework.knowledgediscovery.</code><code class="sig-name descname">Discovery</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">artifact_folder</span></em>, <em class="sig-param"><span class="n">set_logger</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/knowledgediscovery.html#Discovery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.knowledgediscovery.Discovery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gemlib.framework.pipeline.Pipeline" title="gemlib.framework.pipeline.Pipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.framework.pipeline.Pipeline</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.framework.knowledgediscovery.Discovery.biclasses_discovery">
+<code class="sig-name descname">biclasses_discovery</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lin_classification_task</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/knowledgediscovery.html#Discovery.biclasses_discovery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.knowledgediscovery.Discovery.biclasses_discovery" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.knowledgediscovery.Discovery.classification_discovery">
+<code class="sig-name descname">classification_discovery</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/knowledgediscovery.html#Discovery.classification_discovery"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.knowledgediscovery.Discovery.classification_discovery" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.knowledgediscovery.Discovery.discover">
+<code class="sig-name descname">discover</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/knowledgediscovery.html#Discovery.discover"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.knowledgediscovery.Discovery.discover" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.framework.pipeline">
+<span id="gemlib-framework-pipeline-module"></span><h2>gemlib.framework.pipeline module<a class="headerlink" href="#module-gemlib.framework.pipeline" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.framework.pipeline.Pipeline">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.framework.pipeline.</code><code class="sig-name descname">Pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">artifact_folder</span></em>, <em class="sig-param"><span class="n">set_logger</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_classification">
+<code class="sig-name descname">apply_classification</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_classification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_classification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_clustering">
+<code class="sig-name descname">apply_clustering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_clustering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_clustering" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_confusion_matrix">
+<code class="sig-name descname">apply_confusion_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_confusion_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_confusion_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_feature_engineering">
+<code class="sig-name descname">apply_feature_engineering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocess</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_feature_engineering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_feature_engineering" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_filter">
+<code class="sig-name descname">apply_filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocess</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_filter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_preprocessing">
+<code class="sig-name descname">apply_preprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocessings</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_preprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_regression">
+<code class="sig-name descname">apply_regression</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_regression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_regression" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_roc_curve">
+<code class="sig-name descname">apply_roc_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_roc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_roc_curve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_single_preprocessing">
+<code class="sig-name descname">apply_single_preprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">process</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.preprocessing" title="gemlib.abstarct.basetask.preprocessing">gemlib.abstarct.basetask.preprocessing</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_single_preprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_single_preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_single_task">
+<code class="sig-name descname">apply_single_task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_single_task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_single_task" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_tasks">
+<code class="sig-name descname">apply_tasks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_tasks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_tasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_textpreprocessing">
+<code class="sig-name descname">apply_textpreprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocess</span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_textpreprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_textpreprocessing" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_topicmodelling">
+<code class="sig-name descname">apply_topicmodelling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_topicmodelling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_topicmodelling" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_visualization">
+<code class="sig-name descname">apply_visualization</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em>, <em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_visualization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_visualization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.apply_write_to_db">
+<code class="sig-name descname">apply_write_to_db</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="p">:</span> <span class="n"><a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basetask.task" title="gemlib.abstarct.basetask.task">gemlib.abstarct.basetask.task</a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.apply_write_to_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.apply_write_to_db" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.load_data">
+<code class="sig-name descname">load_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.load_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.load_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.framework.pipeline.Pipeline.setup_pipeline_inputs">
+<code class="sig-name descname">setup_pipeline_inputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">object</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/framework/pipeline.html#Pipeline.setup_pipeline_inputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.framework.pipeline.Pipeline.setup_pipeline_inputs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.framework">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.framework" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.regression.html" class="btn btn-neutral float-right" title="gemlib.regression package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gemlib.filtering.html" class="btn btn-neutral float-left" title="gemlib.filtering package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

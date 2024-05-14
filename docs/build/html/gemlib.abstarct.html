@@ -1,0 +1,719 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.abstarct package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib.classification package" href="gemlib.classification.html" />
+    <link rel="prev" title="gemlib package" href="gemlib.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemlib.abstarct package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.abstarct.basefunctionality">gemlib.abstarct.basefunctionality module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.abstarct.baseoutput">gemlib.abstarct.baseoutput module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.abstarct.basetask">gemlib.abstarct.basetask module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.abstarct">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.classification.html">gemlib.classification package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.dataloaderlayer.html">gemlib.dataloaderlayer package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.framework.html">gemlib.framework package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.visualization.html">gemlib.visualization package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+      <li>gemlib.abstarct package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.abstarct.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-abstarct-package">
+<h1>gemlib.abstarct package<a class="headerlink" href="#gemlib-abstarct-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.abstarct.basefunctionality">
+<span id="gemlib-abstarct-basefunctionality-module"></span><h2>gemlib.abstarct.basefunctionality module<a class="headerlink" href="#module-gemlib.abstarct.basefunctionality" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">num_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'hinge'</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">depth</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_matrix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClassifier.get_model">
+<em class="property">abstract </em><code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClassifier.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClassifier.run_testing">
+<em class="property">abstract </em><code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClassifier.run_training">
+<em class="property">abstract </em><code class="sig-name descname">run_training</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseClusterer">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseClusterer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">filter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClusterer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClusterer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClusterer.get_prepared_data">
+<code class="sig-name descname">get_prepared_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClusterer.get_prepared_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClusterer.get_prepared_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClusterer.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClusterer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClusterer.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClusterer.run_algo">
+<em class="property">abstract </em><code class="sig-name descname">run_algo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClusterer.run_algo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClusterer.run_algo" title="Permalink to this definition">¶</a></dt>
+<dd><p>main algorithm</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseClusterer.validate_data">
+<code class="sig-name descname">validate_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseClusterer.validate_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseClusterer.validate_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseConfusionDefinition">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseConfusionDefinition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseConfusionDefinition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseConfusionDefinition.rename_columns">
+<code class="sig-name descname">rename_columns</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseConfusionDefinition.rename_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseConfusionDefinition.rename_columns" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseConfusionDefinition.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseConfusionDefinition.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseConfusionDefinition.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseData">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseData</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.apply_definition">
+<code class="sig-name descname">apply_definition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.apply_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.apply_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines a new column with constant value in the data frame.
+<code class="docutils literal notranslate"><span class="pre">definition</span></code> keyword should be set to a dictionary of {<code class="docutils literal notranslate"><span class="pre">&lt;column</span> <span class="pre">name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>, …}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.apply_drop_na">
+<code class="sig-name descname">apply_drop_na</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.apply_drop_na"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.apply_drop_na" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drops <code class="docutils literal notranslate"><span class="pre">null</span></code> values in dataframe using the subset in <code class="docutils literal notranslate"><span class="pre">drop_na</span></code>.
+<code class="docutils literal notranslate"><span class="pre">drop_na</span></code> keyword should be set in dataloader.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.apply_dtypes">
+<code class="sig-name descname">apply_dtypes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.apply_dtypes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.apply_dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies dtypes to the dataframe in dataloders.
+<code class="docutils literal notranslate"><span class="pre">dtype</span></code> keyword should be set in dataloader.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.apply_fillna">
+<code class="sig-name descname">apply_fillna</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.apply_fillna"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.apply_fillna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fills <code class="docutils literal notranslate"><span class="pre">null</span></code> values in a data frame. <code class="docutils literal notranslate"><span class="pre">fillna</span></code> keyword in dataloader should be set to a dictionary.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.apply_preprocessing">
+<code class="sig-name descname">apply_preprocessing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.apply_preprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.apply_preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the preprocessing in dataloaders</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.combine_with_duplicate">
+<code class="sig-name descname">combine_with_duplicate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">rel_path</span><span class="p">:</span> <span class="n">str</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.combine_with_duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.combine_with_duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the union of full path and relative path to a directory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>str</em>) – full path to a directory</p></li>
+<li><p><strong>rel_path</strong> (<em>str</em>) – relative path to the root path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>unified path</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="s2">&quot;C:/data/foo/dir_1&quot;</span>
+<span class="n">rel_path</span> <span class="o">=</span> <span class="s2">&quot;foo/dir_1/dir_2&quot;</span>
+
+<span class="n">output</span> <span class="o">=</span> <span class="s2">&quot;C:/data/foo/dir_1/dir_2&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseData.cut_off">
+<code class="sig-name descname">cut_off</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseData.cut_off"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseData.cut_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trims the dataframe from head or tail. <code class="docutils literal notranslate"><span class="pre">hold_on</span></code> number of data
+from head if <code class="docutils literal notranslate"><span class="pre">head</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code> otherwise tail.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataFilter">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseDataFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">list_col_names</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">query</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class of data filtering</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_col_names</strong> (<em>list</em><em>, </em><em>optional</em>) – List of columns to keep in dataframe. Defaults to None.</p></li>
+<li><p><strong>query</strong> (<em>str</em><em>, </em><em>optional</em>) – The string query to filter dataframe. Defaults to None.</p></li>
+<li><p><strong>dirpath</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to stage intermediate data. Defaults to None.</p></li>
+<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the intermediate results will be staged in <code class="docutils literal notranslate"><span class="pre">dirpath</span></code>. Defaults to False.</p></li>
+<li><p><strong>input</strong> (<em>list</em><em>, </em><em>optional</em>) – List of inputs to this preprocessing step. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the intermediate results will be staged in <code class="docutils literal notranslate"><span class="pre">dirpath</span></code>. Defaults to False.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataFilter.apply">
+<em class="property">abstract </em><code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataFilter.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataFilter.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply filter on a pandas dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataLoader">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseDataLoader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataLoader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataLoader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gemlib.abstarct.basefunctionality.BaseData" title="gemlib.abstarct.basefunctionality.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseData</span></code></a></p>
+<p>Read fileformats into a pandas dataframe.</p>
+<p>This abstract base class is implemented to read various file formats, and must return a
+pandas dataframe.</p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataLoader.load">
+<em class="property">abstract </em><code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataLoader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataLoader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataWriter">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseDataWriter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataWriter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#gemlib.abstarct.basefunctionality.BaseData" title="gemlib.abstarct.basefunctionality.BaseData"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseData</span></code></a></p>
+<p>Write a pandas dataframe to various file formats.</p>
+<p>This abstract base class is implemented to write a pandas dataframe into various file formats.</p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseDataWriter.write">
+<em class="property">abstract </em><code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseDataWriter.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseDataWriter.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the supplied data to the specified format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseFeatureEngineering">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseFeatureEngineering</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">save</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">condition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnsvalues</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">axis</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_vocab</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_dim</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_path</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">x_cols</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">test_ratio</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>float<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tokenizer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">chunk_size</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseFeatureEngineering"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseFeatureEngineering" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Abstract class of feature engineering</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the preprocessing step. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary defines new columns to the dataframe. Defaults to None.</p></li>
+<li><p><strong>save</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True then the results will be staged. Defaults to False.</p></li>
+<li><p><strong>dirpath</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to the preprocessing directory for staging purposes. Defaults to None.</p></li>
+<li><p><strong>groupby</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to apply the group by. Defaults to None.</p></li>
+<li><p><strong>condition</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary which defines a condition on data as preprocessing step. Defaults to None.</p></li>
+<li><p><strong>keepcolumnsvalues</strong> (<em>list</em><em>, </em><em>optional</em>) – List of column names to be kept after aggregation. Defaults to None.</p></li>
+<li><p><strong>axis</strong> (<em>int</em><em>, </em><em>optional</em>) – Choosing the axis. Defaults to None.</p></li>
+<li><p><strong>num_vocab</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of vocabulary in tokenization process. Defaults to None.</p></li>
+<li><p><strong>embedding_dim</strong> (<em>int</em><em>, </em><em>optional</em>) – Defines embedding dimension in embedding matrix generation. Defaults to None.</p></li>
+<li><p><strong>embedding_path</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to an existing embeddings. Defaults to None.</p></li>
+<li><p><strong>input</strong> (<em>list</em><em>, </em><em>optional</em>) – List of inputs from the pipeline/resources or objects. Defaults to None.</p></li>
+<li><p><strong>columns</strong> (<em>list</em><em>, </em><em>optional</em>) – List of columns to be used in the preprocessing. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True the the data stored in the memory. Defaults to False.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True the the data stored in the memory. Defaults to False.</p></li>
+<li><p><strong>x_cols</strong> (<em>list</em><em>, </em><em>optional</em>) – List of columns to be used in preprocessing process. Defaults to None.</p></li>
+<li><p><strong>y_col</strong> (<em>str</em><em>, </em><em>optional</em>) – A singl column to be used in the preprocessing process. Defaults to None.</p></li>
+<li><p><strong>test_ratio</strong> (<em>float</em><em>, </em><em>optional</em>) – The ratio of data to be used as validation set. Defaults to None.</p></li>
+<li><p><strong>tokenizer</strong> (<em>[</em><em>type</em><em>]</em><em>, </em><em>optional</em>) – A tokenizer from keras. Defaults to None.</p></li>
+<li><p><strong>column</strong> (<em>str</em><em>, </em><em>optional</em>) – A single column to be used in the preprocessing step. Defaults to None.</p></li>
+<li><p><strong>sequence_lenght</strong> (<em>int</em><em>, </em><em>optional</em>) – A single column to be used in the preprocessing step. Defaults to None.</p></li>
+<li><p><strong>chunk_size</strong> (<em>int</em><em>, </em><em>optional</em>) – To run the preprocessing step in chunks (when memory is limited). Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseFeatureEngineering.apply">
+<em class="property">abstract </em><code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseFeatureEngineering.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseFeatureEngineering.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply feature engineering on a pandas dataframe.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseModelValidation">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseModelValidation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseModelValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseModelValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseModelValidation.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseModelValidation.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseModelValidation.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>run the spli function</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BasePlotter">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BasePlotter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">z</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d1</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d2</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirpath</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">d3</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fun</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">order</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">max_v</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cmap</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">valipreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">s</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">aggfunc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">annot</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_max_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trans</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ticks_min_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_error</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_col</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">linewidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">multiaxis</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">legend_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">binsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BasePlotter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BasePlotter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BasePlotter.remove_na">
+<code class="sig-name descname">remove_na</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BasePlotter.remove_na"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BasePlotter.remove_na" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BasePlotter.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BasePlotter.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BasePlotter.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>plotter run</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BasePlotter.save">
+<code class="sig-name descname">save</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">dpi</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BasePlotter.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BasePlotter.save" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseRegressor">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseRegressor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">to_numerical</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRegressor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRegressor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseRegressor.init_model">
+<em class="property">abstract </em><code class="sig-name descname">init_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRegressor.init_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRegressor.init_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>initialises the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseRegressor.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRegressor.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRegressor.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseRocCurves">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseRocCurves</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fontsize</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scatter_point</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRocCurves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRocCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseRocCurves.remove_nans">
+<code class="sig-name descname">remove_nans</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRocCurves.remove_nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRocCurves.remove_nans" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseRocCurves.run">
+<em class="property">abstract </em><code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseRocCurves.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseRocCurves.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates Roc Curve from data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseTextPreprocessing">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseTextPreprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTextPreprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTextPreprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTextPreprocessing.apply">
+<em class="property">abstract </em><code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTextPreprocessing.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTextPreprocessing.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the modelling</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basefunctionality.</code><code class="sig-name descname">BaseTopicModelling</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_num_docs</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">allowed_postags</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">per_geo</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">output_dir</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">file_label</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">use_phrases</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_tfidf</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">num_topics</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">modelname</span><span class="o">=</span><span class="default_value">'lda'</span></em>, <em class="sig-param"><span class="n">perwordtopic</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">allowext</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">corpus</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">corpus_object</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">textcolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">taskname</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">preprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">visualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_key_words</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dictionary</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trainmodel</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.compute_coherence_values">
+<code class="sig-name descname">compute_coherence_values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">dictionary</span></em>, <em class="sig-param"><span class="n">corpus</span></em>, <em class="sig-param"><span class="n">texts</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.compute_coherence_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.compute_coherence_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.format_topics_sentences">
+<code class="sig-name descname">format_topics_sentences</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ldamodel</span></em>, <em class="sig-param"><span class="n">corpus</span></em>, <em class="sig-param"><span class="n">texts</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.format_topics_sentences"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.format_topics_sentences" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.get_all_topics">
+<code class="sig-name descname">get_all_topics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.get_all_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_all_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.get_corpus">
+<code class="sig-name descname">get_corpus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.get_corpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_corpus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.get_geo_topics">
+<code class="sig-name descname">get_geo_topics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.get_geo_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_geo_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.get_model">
+<em class="property">abstract </em><code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.get_per_geo_topics">
+<code class="sig-name descname">get_per_geo_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.get_per_geo_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_per_geo_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.output_topics">
+<code class="sig-name descname">output_topics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">_df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.output_topics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.output_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.abstarct.basefunctionality.BaseTopicModelling.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basefunctionality.html#BaseTopicModelling.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basefunctionality.BaseTopicModelling.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.abstarct.baseoutput">
+<span id="gemlib-abstarct-baseoutput-module"></span><h2>gemlib.abstarct.baseoutput module<a class="headerlink" href="#module-gemlib.abstarct.baseoutput" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.abstarct.baseoutput.output">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.baseoutput.</code><code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/baseoutput.html#output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.baseoutput.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.abstarct.basetask">
+<span id="gemlib-abstarct-basetask-module"></span><h2>gemlib.abstarct.basetask module<a class="headerlink" href="#module-gemlib.abstarct.basetask" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.abstarct.basetask.preprocessing">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basetask.</code><code class="sig-name descname">preprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocessing_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocessing_parent_name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basetask.html#preprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basetask.preprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.abstarct.basetask.task">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.abstarct.basetask.</code><code class="sig-name descname">task</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">task</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">task_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cwd</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/abstarct/basetask.html#task"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.abstarct.basetask.task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.abstarct">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.abstarct" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.classification.html" class="btn btn-neutral float-right" title="gemlib.classification package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gemlib.html" class="btn btn-neutral float-left" title="gemlib package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

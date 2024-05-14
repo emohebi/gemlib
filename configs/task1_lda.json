@@ -1,0 +1,36 @@
+{
+	"cwd": "D:/Projects/SocialMediaEventDetection/Results/gemlib_head_100k",
+ 	"data": {
+ 		"d1": {
+ 			"type": ".csv",
+			"concat": "true",
+ 			"path": "D:/Projects/SocialMediaEventDetection/Input",
+			"num_frames_hold": "100000",
+			"head": "true"
+ 		}
+ 	},
+	"preprocessing": {
+		"p1":{
+			"process": "textfeatureengineering",
+			"type": "twitter",
+			"bins": "0.2"
+		}
+	},
+ 	"tasks": {
+		"task1_lda": {
+			"type": "topicmodelling",
+			"modelname": "lda",
+			"textcolumn": "tweet_text",
+			"num_topics": "20",
+			"visualization": {
+				"plot": "line",
+				"columns": [["Coherence"]],
+				"x_col": "NumTopics",
+				"ticks_y": ["0", "0.8"],
+				"x_label": "Number of topics",
+				"y_label": "Coherence",
+				"title": "Number of topics vs Coherence (lda_50k)"
+			}
+		}
+	}
+}

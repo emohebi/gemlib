@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.visualization.cmapsetup &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.visualization.cmapsetup</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.visualization.cmapsetup</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.colors</span> <span class="kn">import</span> <span class="n">LinearSegmentedColormap</span><span class="p">,</span> <span class="n">ListedColormap</span>
+
+
+<div class="viewcode-block" id="CustomCmap"><a class="viewcode-back" href="../../../gemlib.visualization.html#gemlib.visualization.cmapsetup.CustomCmap">[docs]</a><span class="k">def</span> <span class="nf">CustomCmap</span><span class="p">(</span><span class="n">from_rgb</span><span class="p">,</span> <span class="n">to_rgb</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;custom_cmap&quot;</span><span class="p">):</span>
+
+    <span class="c1"># from color r,g,b</span>
+    <span class="n">r1</span><span class="p">,</span><span class="n">g1</span><span class="p">,</span><span class="n">b1</span> <span class="o">=</span> <span class="n">from_rgb</span>
+
+    <span class="c1"># to color r,g,b</span>
+    <span class="n">r2</span><span class="p">,</span><span class="n">g2</span><span class="p">,</span><span class="n">b2</span> <span class="o">=</span> <span class="n">to_rgb</span>
+
+    <span class="n">cdict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r1</span><span class="p">),</span>
+                     <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r2</span><span class="p">)),</span>
+             <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">g1</span><span class="p">,</span> <span class="n">g1</span><span class="p">),</span>
+                       <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">g2</span><span class="p">,</span> <span class="n">g2</span><span class="p">)),</span>
+             <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b1</span><span class="p">),</span>
+                      <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">b2</span><span class="p">))}</span>
+
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cdict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">cmap</span></div>
+
+
+<div class="viewcode-block" id="setup"><a class="viewcode-back" href="../../../gemlib.visualization.html#gemlib.visualization.cmapsetup.setup">[docs]</a><span class="k">def</span> <span class="nf">setup</span><span class="p">():</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;lines&quot;</span><span class="p">,</span>
+           <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+           <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+           <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+           <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+           <span class="n">markeredgewidth</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+           <span class="n">markersize</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>
+           <span class="n">solid_joinstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span>
+           <span class="n">solid_capstyle</span><span class="o">=</span><span class="s2">&quot;round&quot;</span><span class="p">,</span>
+           <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;patch&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;xtick.major&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;xtick.minor&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;xtick&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;ytick.major&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;ytick.minor&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;ytick&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;in&quot;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;savefig&quot;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;grid&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;0.7&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="s2">&quot;0.4&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;axes&#39;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+
+    <span class="n">cdict1</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;red&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">43.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">43.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">171.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">171.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">243.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">243.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)),</span>
+
+        <span class="s1">&#39;green&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">38.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">38.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">84.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">84.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                  <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">180.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)),</span>
+
+        <span class="s1">&#39;blue&#39;</span><span class="p">:</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">94.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">94.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">137.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">137.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">),</span>
+                 <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">79.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="mf">79.0</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">))</span>
+    <span class="p">}</span>
+    <span class="n">fovio_cmap</span> <span class="o">=</span> <span class="n">LinearSegmentedColormap</span><span class="p">(</span><span class="s1">&#39;Fovio&#39;</span><span class="p">,</span> <span class="n">cdict1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">fovio_cmap</span><span class="p">)</span>
+
+    <span class="c1"># Also register 4 colormaps (dark purple, light purple dark rose, yellow)</span>
+    <span class="n">list_names</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Fovio_darkpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;Fovio_lightpurple&quot;</span><span class="p">,</span> <span class="s2">&quot;Fovio_darkrose&quot;</span><span class="p">,</span> <span class="s2">&quot;Fovio_yellow&quot;</span><span class="p">]</span>
+    <span class="n">fovio_range</span> <span class="o">=</span> <span class="n">fovio_cmap</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+    <span class="c1"># :3 because we keep only rgb, and remove alpha</span>
+    <span class="n">list_color_map</span> <span class="o">=</span> <span class="p">[</span><span class="n">CustomCmap</span><span class="p">(</span><span class="n">fovio_range</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span>
+                                 <span class="n">fovio_range</span><span class="p">[</span><span class="n">i</span><span class="p">][:</span><span class="mi">3</span><span class="p">],</span>
+                                 <span class="n">list_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">list_color_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="n">cmap</span><span class="o">.</span><span class="n">N</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
+        <span class="c1"># Set alpha to go from 0.5 to 1</span>
+        <span class="n">cmap</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+        <span class="c1"># Create new colormap with this alpha setting</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="n">ListedColormap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">list_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="c1"># Register it</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">register_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s2">&quot;image&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Fovio&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

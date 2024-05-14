@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.classification.topicmodelling.tweets.preprocess &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+        <script src="../../../../../_static/jquery.js"></script>
+        <script src="../../../../../_static/underscore.js"></script>
+        <script src="../../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.classification.topicmodelling.tweets.preprocess</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.classification.topicmodelling.tweets.preprocess</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseTextPreprocessing</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">none_values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>
+                   <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">]</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;place_type&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;full_name&#39;</span><span class="p">,</span> <span class="s1">&#39;country_code&#39;</span><span class="p">,</span> <span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;a.long&#39;</span><span class="p">,</span> <span class="s1">&#39;a.lat&#39;</span><span class="p">,</span> <span class="s1">&#39;b.long&#39;</span><span class="p">,</span> <span class="s1">&#39;b.lat&#39;</span><span class="p">,</span>
+               <span class="s1">&#39;c.long&#39;</span><span class="p">,</span> <span class="s1">&#39;c.lat&#39;</span><span class="p">,</span> <span class="s1">&#39;d.long&#39;</span><span class="p">,</span> <span class="s1">&#39;d.lat&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TwitterPreprocessing"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing">[docs]</a><span class="k">class</span> <span class="nc">TwitterPreprocessing</span><span class="p">(</span><span class="n">BaseTextPreprocessing</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TwitterPreprocessing.get_cordinates"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_cordinates">[docs]</a>    <span class="k">def</span> <span class="nf">get_cordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="n">list_val</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">cor</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="n">list_val</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cor</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">list_val</span></div>
+
+<div class="viewcode-block" id="TwitterPreprocessing.parse_place"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.parse_place">[docs]</a>    <span class="k">def</span> <span class="nf">parse_place</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="n">list_val</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;place_type&#39;</span><span class="p">])</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;full_name&#39;</span><span class="p">])</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;country_code&#39;</span><span class="p">])</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">])</span>
+        <span class="n">list_val</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_cordinates</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;bounding_box&#39;</span><span class="p">][</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">list_val</span></div>
+
+<div class="viewcode-block" id="TwitterPreprocessing.add_features"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.add_features">[docs]</a>    <span class="k">def</span> <span class="nf">add_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_long&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;a.long&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;d.long&#39;</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_long&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_long&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;a.lat&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;b.lat&#39;</span><span class="p">]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;c_lat&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="c1">#bins 0.005:1km --- 0.05:6km --- 0.2:11km</span>
+        <span class="c1"># df[&#39;lat_index&#39;] = np.digitize(df.c_lat, [x for x in np.arange(np.min(df.c_lat), np.max(df.c_lat), self.bins)])</span>
+        <span class="c1"># df[&#39;long_index&#39;] = np.digitize(df.c_long, [x for x in np.arange(np.min(df.c_long), np.max(df.c_long), self.bins)])</span>
+
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># UTC to AEST</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;hourofday&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">hour</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;day&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">day</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;month&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">month</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;dayofweek&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dayofweek</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;dayofyear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">dayofyear</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;weekofyear&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.created_at&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">weekofyear</span>
+
+        <span class="c1"># df_count = df.groupby([&#39;lat_index&#39;, &#39;long_index&#39;])[[&#39;tweet.id_str&#39;]].count().rename({&#39;tweet.id_str&#39;: &#39;cell_tweet_count&#39;},</span>
+        <span class="c1">#                                                                                     axis=&#39;columns&#39;)</span>
+        <span class="c1"># df_mean_long = df.groupby([&#39;lat_index&#39;, &#39;long_index&#39;])[[&#39;c_long&#39;]].mean().rename({&#39;c_long&#39;: &#39;cell_long_mean&#39;},</span>
+        <span class="c1">#                                                                                axis=&#39;columns&#39;)</span>
+        <span class="c1"># df_mean_lat = df.groupby([&#39;lat_index&#39;, &#39;long_index&#39;])[[&#39;c_lat&#39;]].mean().rename({&#39;c_lat&#39;: &#39;cell_lat_mean&#39;}, axis=&#39;columns&#39;)</span>
+        <span class="c1"># df.set_index([&#39;lat_index&#39;, &#39;long_index&#39;], inplace=True)</span>
+        <span class="c1">#</span>
+        <span class="c1"># df = df.join(df_count)</span>
+        <span class="c1"># df = df.join(df_mean_lat)</span>
+        <span class="c1"># df = df.join(df_mean_long)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="TwitterPreprocessing.preprocess_tweets"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.preprocess_tweets">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess_tweets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;{&#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;{</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;:&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;: &#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;: </span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;,&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">,&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;, &#39;&quot;</span><span class="p">,</span> <span class="s2">&quot;, </span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">all_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet.place&#39;</span><span class="p">]):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                    <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">none_values</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parse_place</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">:&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;:&quot;</span><span class="p">)</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;: </span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;: &#39;&quot;</span><span class="p">)</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&quot;</span><span class="s2">,&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;,&quot;</span><span class="p">)</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;, </span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;, &#39;&quot;</span><span class="p">)</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+                <span class="n">all_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">none_values</span><span class="p">)</span>
+                <span class="k">pass</span>
+        <span class="n">df_place</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_values</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_place</span><span class="p">)</span>
+        <span class="c1"># filter other countries rather than Australia</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Australia&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Not enough data to run the preprocessing.&quot;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># decode utf-8</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet_text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet_text&#39;</span><span class="p">]]</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;tweet_text&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1"># add more useful features</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_features</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="TwitterPreprocessing.apply"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_tweets</span><span class="p">(</span><span class="n">df</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TwitterPreprocessing.get_df"><a class="viewcode-back" href="../../../../../gemlib.classification.topicmodelling.tweets.html#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_df">[docs]</a>    <span class="k">def</span> <span class="nf">get_df</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

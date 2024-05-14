@@ -1,0 +1,975 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.abstarct.basefunctionality &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.abstarct.basefunctionality</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.abstarct.basefunctionality</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">import</span> <span class="nn">abc</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="c1"># from gensim.models import CoherenceModel</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+
+<span class="c1"># TODO: Move the bits for reading or writing only into those subclasses.</span>
+<div class="viewcode-block" id="BaseData"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData">[docs]</a><span class="k">class</span> <span class="nc">BaseData</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span>
+                 <span class="n">hold_on</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">head</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">dtypes</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">definition</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validpreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">port</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">concat</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">joinon</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">how</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fillna</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop_na</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+                 <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abstract class of data loader.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path (str): Path to a data directory or single file.</span>
+<span class="sd">            hold_on (int, optional): Number of data points to be kept in data. ``head`` should be set. Defaults to None.</span>
+<span class="sd">            head (bool, optional): If ``True`` then the data will be trimmed from head. Defaults to None.</span>
+<span class="sd">            exclude (int, optional): Number of data to be excluded from data. &#39;head&#39; should be set. Defaults to None.</span>
+<span class="sd">            dtypes (dict, optional): Dictionary of data types in a data frame. i.e. {``&lt;col_name&gt;``:``int``}. Defaults to None.</span>
+<span class="sd">            definition (dict, optional): Dictionary in the format of {``&lt;new_col_name&gt;``:``&lt;value&gt;``} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</span>
+<span class="sd">            validpreprocessing (gemlib.preprocessing, optional): A gemlib preprocessing block attached to the data loader. Defaults to None.</span>
+<span class="sd">            port (int, optional): Port number to connect to the data source. Defaults to None.</span>
+<span class="sd">            concat (bool, optional): If set to ``True`` then all the files in the directory will be concatinated along ``axis=0``. Defaults to None.</span>
+<span class="sd">            joinon (list, optional): A list of columns to join the datasets on [``&lt;left_data_col&gt;``, ``&lt;right_data_col&gt;``]. Defaults to None.</span>
+<span class="sd">            suffix (str, optional): Data file fromat (``.csv`` or ``.xlsx``).</span>
+<span class="sd">            how (str, optional): The way that join should be run (left, right ,...). Defaults to None.</span>
+<span class="sd">            fillna (dict, optional): A dictionary of the format {``&lt;col_name&gt;``: ``&lt;value&gt;``} to fill ``nulls`` by ``&lt;value&gt;``. Defaults to None.</span>
+<span class="sd">            drop_na (list, optional): A list of columns to drop nulls. Defaults to None.</span>
+<span class="sd">            cache (bool, optional): If ``True`` the the data will be kept in the memory. Defaults to ``False``.</span>
+<span class="sd">            name (str, optional): Name of the data loader. Defaults to None.</span>
+<span class="sd">            num_rows (int, optional): Number of rows to load from data file. Defaults to None.</span>
+<span class="sd">            sheet_name (str, optional): Name of spread sheet in an excel file. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="c1"># this is IP for dbs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># The current working directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span> <span class="o">=</span> <span class="n">hold_on</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">head</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exclude</span> <span class="o">=</span> <span class="n">exclude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">=</span> <span class="n">dtypes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">definition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">validpreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">port</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concat</span> <span class="o">=</span> <span class="n">concat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">joinon</span> <span class="o">=</span> <span class="n">joinon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">how</span> <span class="o">=</span> <span class="n">how</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fillna</span> <span class="o">=</span> <span class="n">fillna</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop_na</span> <span class="o">=</span> <span class="n">drop_na</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_rows</span> <span class="o">=</span> <span class="n">num_rows</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sheet_name</span> <span class="o">=</span> <span class="n">sheet_name</span>
+
+<div class="viewcode-block" id="BaseData.combine_with_duplicate"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.combine_with_duplicate">[docs]</a>    <span class="k">def</span> <span class="nf">combine_with_duplicate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">rel_path</span><span class="p">:</span><span class="nb">str</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Finds the union of full path and relative path to a directory.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            root (str): full path to a directory</span>
+<span class="sd">            rel_path (str): relative path to the root path</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: unified path</span>
+
+<span class="sd">        Example:</span>
+
+<span class="sd">            .. code-block::</span>
+
+<span class="sd">                root = &quot;C:/data/foo/dir_1&quot;</span>
+<span class="sd">                rel_path = &quot;foo/dir_1/dir_2&quot;</span>
+
+<span class="sd">                output = &quot;C:/data/foo/dir_1/dir_2&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="n">rps</span> <span class="o">=</span> <span class="n">rel_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="n">popped</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="n">rps</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">rps</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">popped</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="n">popped</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rs</span> <span class="o">+</span> <span class="n">rps</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseData.apply_preprocessing"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.apply_preprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">apply_preprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        Applies the preprocessing in dataloaders</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_drop_na</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_definition</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_dtypes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cut_off</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply_fillna</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BaseData.apply_dtypes"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.apply_dtypes">[docs]</a>    <span class="k">def</span> <span class="nf">apply_dtypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Applies dtypes to the dataframe in dataloders. </span>
+<span class="sd">        ``dtype`` keyword should be set in dataloader.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtypes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseData.apply_drop_na"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.apply_drop_na">[docs]</a>    <span class="k">def</span> <span class="nf">apply_drop_na</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Drops ``null`` values in dataframe using the subset in ``drop_na``. </span>
+<span class="sd">        ``drop_na`` keyword should be set in dataloader.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_na</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">drop_na</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseData.cut_off"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.cut_off">[docs]</a>    <span class="k">def</span> <span class="nf">cut_off</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Trims the dataframe from head or tail. ``hold_on`` number of data </span>
+<span class="sd">        from head if ``head`` is ``True`` otherwise tail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">exclude</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;Error, &quot;hold_on&quot; should be defined along side the &quot;head [True/False]&quot;, cut off terminated ...&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;Error, &quot;hold_on&quot; should be defined along side the &quot;head [True/False]&quot;, cut off terminated ...&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hold_on</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseData.apply_definition"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.apply_definition">[docs]</a>    <span class="k">def</span> <span class="nf">apply_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines a new column with constant value in the data frame. </span>
+<span class="sd">        ``definition`` keyword should be set to a dictionary of {``&lt;column name&gt;``: ``&lt;value&gt;``, ...} </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">k</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="n">k</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">k</span><span class="p">]},</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseData.apply_fillna"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseData.apply_fillna">[docs]</a>    <span class="k">def</span> <span class="nf">apply_fillna</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fills ``null`` values in a data frame. ``fillna`` keyword in dataloader should be set to a dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fillna</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fillna</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fillna</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BaseDataLoader"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader">[docs]</a><span class="k">class</span> <span class="nc">BaseDataLoader</span><span class="p">(</span><span class="n">BaseData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Read fileformats into a pandas dataframe.</span>
+
+<span class="sd">    This abstract base class is implemented to read various file formats, and must return a</span>
+<span class="sd">    pandas dataframe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseDataLoader.load"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader.load">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a source file and return the contents as a pandas dataframe</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BaseDataWriter"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataWriter">[docs]</a><span class="k">class</span> <span class="nc">BaseDataWriter</span><span class="p">(</span><span class="n">BaseData</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Write a pandas dataframe to various file formats.</span>
+
+<span class="sd">    This abstract base class is implemented to write a pandas dataframe into various file formats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="BaseDataWriter.write"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataWriter.write">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the supplied data to the specified format.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BaseFeatureEngineering"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseFeatureEngineering">[docs]</a><span class="k">class</span> <span class="nc">BaseFeatureEngineering</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">definition</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">groupby</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">condition</span><span class="p">:</span><span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">keepcolumnsvalues</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_vocab</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">embedding_dim</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">embedding_path</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">columns</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">concat</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">x_cols</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_col</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_ratio</span><span class="p">:</span><span class="nb">float</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tokenizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">column</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sequence_lenght</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abstract class of feature engineering</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str, optional): Name of the preprocessing step. Defaults to None.</span>
+<span class="sd">            definition (dict, optional): A dictionary defines new columns to the dataframe. Defaults to None.</span>
+<span class="sd">            save (bool, optional): If True then the results will be staged. Defaults to False.</span>
+<span class="sd">            dirpath (str, optional): Path to the preprocessing directory for staging purposes. Defaults to None.</span>
+<span class="sd">            groupby (list, optional): A list of columns to apply the group by. Defaults to None.</span>
+<span class="sd">            condition (dict, optional): A dictionary which defines a condition on data as preprocessing step. Defaults to None.</span>
+<span class="sd">            keepcolumnsvalues (list, optional): List of column names to be kept after aggregation. Defaults to None.</span>
+<span class="sd">            axis (int, optional): Choosing the axis. Defaults to None.</span>
+<span class="sd">            num_vocab (int, optional): Number of vocabulary in tokenization process. Defaults to None.</span>
+<span class="sd">            embedding_dim (int, optional): Defines embedding dimension in embedding matrix generation. Defaults to None.</span>
+<span class="sd">            embedding_path (str, optional): Path to an existing embeddings. Defaults to None.</span>
+<span class="sd">            input (list, optional): List of inputs from the pipeline/resources or objects. Defaults to None.</span>
+<span class="sd">            columns (list, optional): List of columns to be used in the preprocessing. Defaults to None.</span>
+<span class="sd">            cache (bool, optional): If True the the data stored in the memory. Defaults to False.</span>
+<span class="sd">            concat (bool, optional): If True the the data stored in the memory. Defaults to False.</span>
+<span class="sd">            x_cols (list, optional): List of columns to be used in preprocessing process. Defaults to None.</span>
+<span class="sd">            y_col (str, optional): A singl column to be used in the preprocessing process. Defaults to None.</span>
+<span class="sd">            test_ratio (float, optional): The ratio of data to be used as validation set. Defaults to None.</span>
+<span class="sd">            tokenizer ([type], optional): A tokenizer from keras. Defaults to None.</span>
+<span class="sd">            column (str, optional): A single column to be used in the preprocessing step. Defaults to None.</span>
+<span class="sd">            sequence_lenght (int, optional): A single column to be used in the preprocessing step. Defaults to None.</span>
+<span class="sd">            chunk_size (int, optional): To run the preprocessing step in chunks (when memory is limited). Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">=</span> <span class="n">definition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="n">save</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="n">dirpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">condition</span> <span class="o">=</span> <span class="n">condition</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keepcolumnsvalues</span> <span class="o">=</span> <span class="n">keepcolumnsvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_vocab</span> <span class="o">=</span> <span class="n">num_vocab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="n">embedding_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">concat</span> <span class="o">=</span> <span class="n">concat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_cols</span> <span class="o">=</span> <span class="n">x_cols</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_col</span> <span class="o">=</span> <span class="n">y_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_ratio</span> <span class="o">=</span> <span class="n">test_ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tokenizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column</span> <span class="o">=</span> <span class="n">column</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence_lenght</span> <span class="o">=</span> <span class="n">sequence_lenght</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="n">chunk_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor_mapping</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BaseFeatureEngineering.apply"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseFeatureEngineering.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply feature engineering on a pandas dataframe.&quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BaseDataFilter"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataFilter">[docs]</a><span class="k">class</span> <span class="nc">BaseDataFilter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_col_names</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">dirpath</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">save</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span><span class="nb">list</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cache</span><span class="p">:</span><span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Abstract class of data filtering</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            list_col_names (list, optional): List of columns to keep in dataframe. Defaults to None.</span>
+<span class="sd">            query (str, optional): The string query to filter dataframe. Defaults to None.</span>
+<span class="sd">            dirpath (str, optional): Path to stage intermediate data. Defaults to None.</span>
+<span class="sd">            save (bool, optional): If ``True`` then the intermediate results will be staged in ``dirpath``. Defaults to False.</span>
+<span class="sd">            input (list, optional): List of inputs to this preprocessing step. Defaults to None.</span>
+<span class="sd">            cache (bool, optional): If ``True`` then the intermediate results will be staged in ``dirpath``. Defaults to False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_names</span> <span class="o">=</span> <span class="n">list_col_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">query</span> <span class="o">=</span> <span class="n">query</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="n">dirpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span> <span class="o">=</span> <span class="n">save</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cache</span>
+
+<div class="viewcode-block" id="BaseDataFilter.apply"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataFilter.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply filter on a pandas dataframe.&quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BasePlotter"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter">[docs]</a><span class="k">class</span> <span class="nc">BasePlotter</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d1</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">d2</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dirpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">d3</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fun</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_v</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_v</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valipreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">x_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ticks_max_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticks_max_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ticks_min_x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticks_min_y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">add_error</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_col</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">padsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">multiaxis</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legend_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scatter_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stacked</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">binsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">columns</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;plasma&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectral&#39;</span><span class="p">,</span> <span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="s1">&#39;cool&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;Greens&#39;</span><span class="p">,</span> <span class="s1">&#39;Reds&#39;</span><span class="p">,</span> <span class="s1">&#39;autumn&#39;</span><span class="p">,</span> <span class="s1">&#39;Set1&#39;</span><span class="p">,</span>
+                       <span class="s1">&#39;Purples&#39;</span><span class="p">,</span> <span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="s1">&#39;jet&#39;</span><span class="p">,</span> <span class="s1">&#39;Paired&#39;</span><span class="p">,</span> <span class="s1">&#39;terrain&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d1</span> <span class="o">=</span> <span class="n">d1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d2</span> <span class="o">=</span> <span class="n">d2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">d3</span> <span class="o">=</span> <span class="n">d3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fun</span> <span class="o">=</span> <span class="n">fun</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="n">dirpath</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_v</span> <span class="o">=</span> <span class="n">min_v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_v</span> <span class="o">=</span> <span class="n">max_v</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmap</span> <span class="o">=</span> <span class="n">cmap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">valipreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">s</span> <span class="o">=</span> <span class="n">s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend</span> <span class="o">=</span> <span class="n">legend</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend_names</span> <span class="o">=</span> <span class="n">legend_names</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_label</span> <span class="o">=</span> <span class="n">x_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_label</span> <span class="o">=</span> <span class="n">y_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">aggfunc</span> <span class="o">=</span> <span class="n">aggfunc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">annot</span> <span class="o">=</span> <span class="n">annot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticks_max_y</span> <span class="o">=</span> <span class="n">ticks_max_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticks_max_x</span> <span class="o">=</span> <span class="n">ticks_max_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticks_min_x</span> <span class="o">=</span> <span class="n">ticks_min_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ticks_min_y</span> <span class="o">=</span> <span class="n">ticks_min_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figsize</span> <span class="o">=</span> <span class="n">figsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trans</span> <span class="o">=</span> <span class="n">trans</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span> <span class="o">=</span> <span class="n">add_error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bins</span> <span class="o">=</span> <span class="n">bins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_col</span> <span class="o">=</span> <span class="n">x_col</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontsize</span> <span class="o">=</span> <span class="n">fontsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linewidth</span> <span class="o">=</span> <span class="n">linewidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">padsize</span> <span class="o">=</span> <span class="n">padsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiaxis</span> <span class="o">=</span> <span class="n">multiaxis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scatter_point</span> <span class="o">=</span> <span class="n">scatter_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stacked</span> <span class="o">=</span> <span class="n">stacked</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">binsize</span><span class="o">=</span> <span class="n">binsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+        <span class="k">if</span> <span class="n">padsize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">labelpad</span> <span class="o">=</span> <span class="n">padsize</span> <span class="o">-</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="BasePlotter.save"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dpi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;file </span><span class="si">{0}</span><span class="s1"> saved.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="BasePlotter.remove_na"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter.remove_na">[docs]</a>    <span class="k">def</span> <span class="nf">remove_na</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BasePlotter.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BasePlotter.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;plotter run&quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BaseConfusionDefinition"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition">[docs]</a><span class="k">class</span> <span class="nc">BaseConfusionDefinition</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">truth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">predicted</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">rowindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">columnindex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">validpreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validvisualization</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timecolumn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">column_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">keepcolumnvalues</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truth</span> <span class="o">=</span> <span class="n">truth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span> <span class="o">=</span> <span class="n">predicted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columnindex</span> <span class="o">=</span> <span class="n">columnindex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rowindex</span> <span class="o">=</span> <span class="n">rowindex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">validpreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validvisualization</span> <span class="o">=</span> <span class="n">validvisualization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timecolumn</span> <span class="o">=</span> <span class="n">timecolumn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column_map</span> <span class="o">=</span> <span class="n">column_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keepcolumnvalues</span> <span class="o">=</span> <span class="n">keepcolumnvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="BaseConfusionDefinition.rename_columns"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition.rename_columns">[docs]</a>    <span class="k">def</span> <span class="nf">rename_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">column_map</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">column_map</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="BaseConfusionDefinition.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;generates confusion matrix from data&quot;&quot;&quot;</span></div></div>
+
+<div class="viewcode-block" id="BaseModelValidation"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseModelValidation">[docs]</a><span class="k">class</span> <span class="nc">BaseModelValidation</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">algo_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algo_name</span> <span class="o">=</span> <span class="n">algo_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="BaseModelValidation.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseModelValidation.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; run the spli function &quot;&quot;&quot;</span></div></div>
+
+<div class="viewcode-block" id="BaseRegressor"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRegressor">[docs]</a><span class="k">class</span> <span class="nc">BaseRegressor</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">algo_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">to_numerical</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">validpreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algo_name</span> <span class="o">=</span> <span class="n">algo_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">validpreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_validation</span><span class="p">:</span><span class="n">BaseModelValidation</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="BaseRegressor.init_model"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRegressor.init_model">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">init_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; initialises the model &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseRegressor.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRegressor.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_model</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_validation</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+
+<div class="viewcode-block" id="BaseClassifier"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier">[docs]</a><span class="k">class</span> <span class="nc">BaseClassifier</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">num_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;hinge&#39;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">algo_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validpreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">x_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_test</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">embedding_matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sequence_lenght</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">epoch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">model_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_col_map</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">top_n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_iter</span> <span class="o">=</span> <span class="n">num_iter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss</span> <span class="o">=</span> <span class="n">loss</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kernel</span> <span class="o">=</span> <span class="s1">&#39;linear&#39;</span> <span class="k">if</span> <span class="n">kernel</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">kernel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">depth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algo_name</span> <span class="o">=</span> <span class="n">algo_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_train</span> <span class="o">=</span> <span class="n">x_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_test</span> <span class="o">=</span> <span class="n">x_test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_test</span> <span class="o">=</span> <span class="n">y_test</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_matrix</span> <span class="o">=</span> <span class="n">embedding_matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence_lenght</span> <span class="o">=</span> <span class="n">sequence_lenght</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">epoch</span> <span class="o">=</span> <span class="n">epoch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">validpreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">embedding_layer_keras</span> <span class="o">=</span> <span class="kc">None</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">model_path</span> <span class="o">=</span> <span class="n">model_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_col_map</span> <span class="o">=</span> <span class="n">y_col_map</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top_n</span> <span class="o">=</span> <span class="n">top_n</span>
+
+<div class="viewcode-block" id="BaseClassifier.run_training"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier.run_training">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run_training</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; train the initialiazed or loaded model &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseClassifier.run_testing"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier.run_testing">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run_testing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; test the trained or loaded model &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseClassifier.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; runs the tasks on the model &quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseClassifier.get_model"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier.get_model">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; returns the trained or loaded model &quot;&quot;&quot;</span></div></div>
+
+
+<div class="viewcode-block" id="BaseClusterer"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClusterer">[docs]</a><span class="k">class</span> <span class="nc">BaseClusterer</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dimensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">algo_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="n">dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="nb">filter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_clusters</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">algo_name</span> <span class="o">=</span> <span class="n">algo_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="BaseClusterer.validate_data"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClusterer.validate_data">[docs]</a>    <span class="k">def</span> <span class="nf">validate_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">2e4</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;this is a big data for clustering on a single machine. terminating this task.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;there is not enough data for clustering purposes. length of data is: </span><span class="si">{0}</span><span class="s2"> ..terminating this task.&quot;</span><span class="o">.</span>
+                  <span class="nb">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BaseClusterer.get_prepared_data"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClusterer.get_prepared_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_prepared_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># no need for binning</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;UD_TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="s1">&#39;UD_TARGET&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="c1"># go for binning</span>
+        <span class="n">cluster_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">point</span> <span class="ow">in</span> <span class="n">cluster_points</span><span class="p">:</span>
+            <span class="n">dim_data</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+                <span class="n">min_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">feature</span><span class="p">])</span>
+                <span class="n">max_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">feature</span><span class="p">])</span>
+                <span class="n">hist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]</span> <span class="o">==</span> <span class="n">point</span><span class="p">,</span> <span class="n">feature</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                    <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">min_f</span><span class="p">,</span> <span class="n">max_f</span><span class="p">))</span>
+                <span class="n">dim_data</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">dim_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dim_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseClusterer.run_algo"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClusterer.run_algo">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run_algo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; main algorithm&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseClusterer.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClusterer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_algo</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">exceptionType</span><span class="p">,</span> <span class="n">exceptionValue</span><span class="p">,</span> <span class="n">exceptionTraceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;clusterer failed!!!</span><span class="se">\n</span><span class="s2"> </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exceptionValue</span><span class="p">))</span></div></div>
+
+
+<div class="viewcode-block" id="BaseRocCurves"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRocCurves">[docs]</a><span class="k">class</span> <span class="nc">BaseRocCurves</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">truth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">predicted</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">validpreprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timecolumn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scatter_point</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">truth</span> <span class="o">=</span> <span class="n">truth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predicted</span> <span class="o">=</span> <span class="n">predicted</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="o">=</span> <span class="n">validpreprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timecolumn</span> <span class="o">=</span> <span class="n">timecolumn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figsize</span> <span class="o">=</span> <span class="n">figsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fontsize</span> <span class="o">=</span> <span class="n">fontsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scatter_point</span> <span class="o">=</span> <span class="n">scatter_point</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input</span> <span class="o">=</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="BaseRocCurves.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRocCurves.run">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;generates Roc Curve from data&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="BaseRocCurves.remove_nans"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRocCurves.remove_nans">[docs]</a>    <span class="k">def</span> <span class="nf">remove_nans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="BaseTopicModelling"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling">[docs]</a><span class="k">class</span> <span class="nc">BaseTopicModelling</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_num_docs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">allowed_postags</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">groupby</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">per_geo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file_label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">use_phrases</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">use_tfidf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">modelname</span><span class="o">=</span><span class="s1">&#39;lda&#39;</span><span class="p">,</span> <span class="n">perwordtopic</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">allowext</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">corpus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corpus_object</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">textcolumn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">taskname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">preprocessing</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">visualization</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_key_words</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dictionary</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trainmodel</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_num_docs</span> <span class="o">=</span> <span class="n">min_num_docs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allowed_postags</span><span class="o">=</span> <span class="n">allowed_postags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span> <span class="o">=</span> <span class="n">groupby</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">per_geo</span> <span class="o">=</span> <span class="n">per_geo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">output_dir</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_label</span> <span class="o">=</span> <span class="n">file_label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_phrases</span> <span class="o">=</span> <span class="n">use_phrases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_tfidf</span> <span class="o">=</span> <span class="n">use_tfidf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_topics</span> <span class="o">=</span> <span class="n">num_topics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modelname</span> <span class="o">=</span> <span class="n">modelname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">perwordtopic</span> <span class="o">=</span> <span class="n">perwordtopic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allowext</span> <span class="o">=</span> <span class="n">allowext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus_object</span><span class="p">:</span><span class="n">BaseTopicModelling</span> <span class="o">=</span> <span class="n">corpus_object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">=</span> <span class="n">corpus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span> <span class="o">=</span> <span class="n">dictionary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">textcolumn</span> <span class="o">=</span> <span class="n">textcolumn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessing</span><span class="p">:</span><span class="n">BaseTextPreprocessing</span> <span class="o">=</span> <span class="n">preprocessing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">taskname</span> <span class="o">=</span> <span class="n">taskname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validvisualization</span> <span class="o">=</span> <span class="n">visualization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_key_words</span> <span class="o">=</span> <span class="n">num_key_words</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trainmodel</span> <span class="o">=</span> <span class="n">trainmodel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BaseTopicModelling.get_geo_topics"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_geo_topics">[docs]</a>    <span class="k">def</span> <span class="nf">get_geo_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">:</span>
+            <span class="n">all_weeks_df</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">week</span><span class="p">,</span> <span class="n">_df_week</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)):</span>
+                <span class="n">df_topics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_per_geo_topics</span><span class="p">(</span><span class="n">_df_week</span><span class="p">)</span>
+                <span class="n">df_topics</span><span class="p">[</span><span class="s1">&#39;groupby&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">week</span>
+                <span class="n">all_weeks_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_topics</span><span class="p">)</span>
+            <span class="n">df_all_topics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">all_weeks_df</span><span class="p">)</span>
+            <span class="n">df_all_topics</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df_all_topics</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_per_geo_topics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+            <span class="n">df_all_topics</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df_all_topics</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.get_per_geo_topics"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_per_geo_topics">[docs]</a>    <span class="k">def</span> <span class="nf">get_per_geo_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">all_topics</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_df</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;lat_index&#39;</span><span class="p">,</span> <span class="s1">&#39;long_index&#39;</span><span class="p">])):</span>
+            <span class="n">region</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">lat_mean</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s1">&#39;lat_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">long_mean</span> <span class="o">=</span> <span class="n">_df</span><span class="p">[</span><span class="s1">&#39;long_mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">topics_words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_topics</span><span class="p">(</span><span class="n">_df</span><span class="p">,</span> <span class="p">)</span>
+            <span class="n">region</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">topics_words</span><span class="p">)</span>
+            <span class="n">region</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">count</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">lat_mean</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">long_mean</span><span class="p">])</span>
+            <span class="n">all_topics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+        <span class="n">df_topics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_topics</span><span class="p">,</span>
+                                 <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lat_index&#39;</span><span class="p">,</span> <span class="s1">&#39;long_index&#39;</span><span class="p">,</span> <span class="s1">&#39;topics&#39;</span><span class="p">,</span>
+                                          <span class="s1">&#39;tweet_count&#39;</span><span class="p">,</span> <span class="s1">&#39;lat_m&#39;</span><span class="p">,</span> <span class="s1">&#39;long_m&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">df_topics</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.get_all_topics"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_all_topics">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">all_topics</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">topics_words</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_topics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span>
+        <span class="n">all_topics</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">topics_words</span><span class="p">])</span>
+        <span class="n">df_topics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_topics</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">df_topics</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.output_topics"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.output_topics">[docs]</a>    <span class="k">def</span> <span class="nf">output_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_df</span><span class="p">):</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">()</span> <span class="c1"># generate corpus</span>
+        <span class="n">coherence_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_topics</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;filteredTweets_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_label</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">textcolumn</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;len of data in before topic generation: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainmodel</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span> <span class="c1"># generate new model</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;model is &quot;None&quot; ...&#39;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;updating the model online ...&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">)</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;model_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_label</span><span class="si">}</span><span class="s1">.pkl&#39;</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+                <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+                <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">show_topics</span><span class="p">(</span><span class="n">num_topics</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_topics</span><span class="p">,</span> <span class="n">num_words</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_key_words</span><span class="p">,</span> <span class="n">formatted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">topics_words</span> <span class="o">=</span> <span class="p">[(</span><span class="n">tp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">wd</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">wd</span> <span class="ow">in</span> <span class="n">tp</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="n">all_topics</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">topics_words</span><span class="p">])</span>
+        <span class="n">df_topics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_topics</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;topics&#39;</span><span class="p">])</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Topics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_label</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+        <span class="n">df_topics</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+        <span class="n">sent_topics_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_topics_sentences</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dominantTopics_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">file_label</span><span class="si">}</span><span class="s1">.csv&#39;</span><span class="p">)</span>
+        <span class="n">sent_topics_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="c1"># coherence = self.compute_coherence_values(self.model, self.dictionary, self.corpus, data)</span>
+        <span class="c1"># utilities._info(</span>
+        <span class="c1">#     f&#39;coherence values is: {coherence} for num topics: {self.num_topics} --- task: {self.taskname}&#39;)</span>
+        <span class="c1"># coherence_values.append([self.num_topics, coherence])</span>
+        <span class="c1"># df_c = pd.DataFrame(coherence_values, columns=[&#39;NumTopics&#39;, &#39;Coherence&#39;])</span>
+        <span class="c1"># df_c.to_csv(self.output_dir / Path(f&#39;coehrence_{self.taskname}.csv&#39;), index=False)</span>
+        <span class="c1"># assert self.df.shape[0]==sent_topics_df.shape[0], &quot;error: len of input df is not same as topics outputs&quot;</span>
+        <span class="c1"># results[&#39;single&#39;] = sent_topics_df</span>
+        <span class="c1"># return results</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">,</span> <span class="n">sent_topics_df</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.run"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_topics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.compute_coherence_values"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.compute_coherence_values">[docs]</a>    <span class="k">def</span> <span class="nf">compute_coherence_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="n">text_pure</span> <span class="o">=</span> <span class="p">[[</span><span class="n">dictionary</span><span class="p">[</span><span class="n">word_id</span><span class="p">]</span> <span class="k">for</span> <span class="n">word_id</span><span class="p">,</span> <span class="n">freq</span> <span class="ow">in</span> <span class="n">doc</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">corpus</span><span class="p">]</span>
+        <span class="c1"># coherencemodel = CoherenceModel(model=model, corpus=corpus, dictionary=dictionary, texts=text_pure,</span>
+        <span class="c1">#                                 coherence=&#39;c_v&#39;)</span>
+        <span class="n">coherence_values</span> <span class="o">=</span> <span class="kc">None</span><span class="c1">#coherencemodel.get_coherence()</span>
+        <span class="k">return</span> <span class="n">coherence_values</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.format_topics_sentences"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.format_topics_sentences">[docs]</a>    <span class="k">def</span> <span class="nf">format_topics_sentences</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ldamodel</span><span class="p">,</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="c1"># Init output</span>
+        <span class="n">sent_topics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+        <span class="c1"># Get main topic in each document</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ldamodel</span><span class="p">[</span><span class="n">corpus</span><span class="p">]):</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Get the Dominant topic, Perc Contribution and Keywords for each document</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="p">(</span><span class="n">topic_num</span><span class="p">,</span> <span class="n">prop_topic</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># =&gt; dominant topic</span>
+                    <span class="n">wp</span> <span class="o">=</span> <span class="n">ldamodel</span><span class="o">.</span><span class="n">show_topic</span><span class="p">(</span><span class="n">topic_num</span><span class="p">)</span>
+                    <span class="n">topic_keywords</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">wp</span><span class="p">])</span>
+                    <span class="n">sent_topics_df</span> <span class="o">=</span> <span class="n">sent_topics_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">topic_num</span><span class="p">),</span> <span class="nb">round</span><span class="p">(</span><span class="n">prop_topic</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">topic_keywords</span><span class="p">]),</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+        <span class="c1"># Add original text to the end of the output</span>
+        <span class="n">contents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+        <span class="n">sent_topics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">sent_topics_df</span><span class="p">,</span> <span class="n">contents</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">sent_topics_df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">sent_topics_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Doc_No&#39;</span><span class="p">,</span> <span class="s1">&#39;Dominant_Topic&#39;</span><span class="p">,</span> <span class="s1">&#39;Topic_Perc_Contribution&#39;</span><span class="p">,</span> <span class="s1">&#39;Topic_Keywords&#39;</span><span class="p">,</span> <span class="s1">&#39;Text&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">sent_topics_df</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.get_corpus"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">get_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">textcolumn</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dictionary</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus_object</span><span class="o">.</span><span class="n">get_corpus</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corpus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;corpus is Not a valid corpus...&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;corpus generated...&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BaseTopicModelling.get_model"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTopicModelling.get_model">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;get the model&quot;&quot;&quot;</span></div></div>
+
+<div class="viewcode-block" id="BaseTextPreprocessing"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTextPreprocessing">[docs]</a><span class="k">class</span> <span class="nc">BaseTextPreprocessing</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bins</span> <span class="o">=</span> <span class="n">bins</span>
+
+<div class="viewcode-block" id="BaseTextPreprocessing.apply"><a class="viewcode-back" href="../../../gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTextPreprocessing.apply">[docs]</a>    <span class="nd">@abc</span><span class="o">.</span><span class="n">abstractmethod</span>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;runs the modelling&quot;&quot;&quot;</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

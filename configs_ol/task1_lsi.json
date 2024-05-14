@@ -1,0 +1,35 @@
+{
+	"cwd": "D:/Projects/SocialMediaEventDetection/Results/full_data_lsi",
+ 	"data": {
+ 		"d1": {
+ 			"type": ".csv",
+			"concat": "true",
+ 			"path": "D:/Projects/SocialMediaEventDetection/Input"
+ 		}
+ 	},
+	"preprocessing": {
+		"p1":{
+			"process": "textfeatureengineering",
+			"type": "twitter",
+			"bins": "0.2"
+		}
+	},
+ 	"tasks": {
+		"task2_lsi_50k": {
+			"type": "topicmodelling",
+			"modelname": "lsi",
+			"textcolumn": "tweet_text",
+			"num_topics": "20",
+			"use_tfidf": "true",
+			"visualization": {
+				"plot": "line",
+				"columns": [["Coherence"]],
+				"x_col": "NumTopics",
+				"ticks_y": ["0", "0.8"],
+				"x_label": "Number of topics",
+				"y_label": "Coherence",
+				"title": "Number of topics vs Coherence (50k_lsi)"
+			}
+		}
+	}
+}

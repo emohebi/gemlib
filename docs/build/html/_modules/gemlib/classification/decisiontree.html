@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.classification.decisiontree &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.classification.decisiontree</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.classification.decisiontree</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseClassifier</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">tree</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="c1"># import pydotplus as pydot</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Decisiontree"><a class="viewcode-back" href="../../../gemlib.classification.html#gemlib.classification.decisiontree.Decisiontree">[docs]</a><span class="k">class</span> <span class="nc">Decisiontree</span><span class="p">(</span><span class="n">BaseClassifier</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Decisiontree.run_testing"><a class="viewcode-back" href="../../../gemlib.classification.html#gemlib.classification.decisiontree.Decisiontree.run_testing">[docs]</a>    <span class="k">def</span> <span class="nf">run_testing</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Decisiontree.get_model"><a class="viewcode-back" href="../../../gemlib.classification.html#gemlib.classification.decisiontree.Decisiontree.get_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Decisiontree.run_training"><a class="viewcode-back" href="../../../gemlib.classification.html#gemlib.classification.decisiontree.Decisiontree.run_training">[docs]</a>    <span class="k">def</span> <span class="nf">run_training</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="n">columns</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">Y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">clf</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">depth</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span></div>
+        <span class="c1"># dot_data = tree.export_graphviz(clf, out_file=None, feature_names=columns,</span>
+        <span class="c1">#                                 class_names=self.df[self.target].unique().tolist())</span>
+        <span class="c1"># graph = pydot.graph_from_dot_data(dot_data)</span>
+        <span class="c1"># path = self.dirpath + &#39;_vs_&#39;.join(columns[0:2]) + &#39;_&#39; + &#39;decisiontree.pdf&#39;</span>
+        <span class="c1"># graph.write_pdf(path)</span>
+        <span class="c1"># if len(columns) == 2 and self.df[self.target].dtype != object:</span>
+        <span class="c1">#     plot_colors = &quot;bry&quot;</span>
+        <span class="c1">#     plot_step = 0.001</span>
+        <span class="c1">#     fig = plt.figure(figsize=(5, 5))  # figsize=(5, 5), dpi=600</span>
+        <span class="c1">#     x_min, x_max = X[:, 0].min() - 0.1, X[:, 0].max() + 0.1</span>
+        <span class="c1">#     y_min, y_max = X[:, 1].min() - 0.1, X[:, 1].max() + 0.1</span>
+        <span class="c1">#     xx, yy = np.meshgrid(np.arange(x_min, x_max, plot_step),</span>
+        <span class="c1">#                          np.arange(y_min, y_max, plot_step))</span>
+
+        <span class="c1">#     Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])</span>
+        <span class="c1">#     Z = Z.reshape(xx.shape)</span>
+        <span class="c1">#     cs = plt.contourf(xx, yy, Z, cmap=plt.cm.Paired)</span>
+
+        <span class="c1">#     for i, color in zip([1, 0], plot_colors):</span>
+        <span class="c1">#         idx = np.where(Y == i)</span>
+        <span class="c1">#         plt.scatter(X[idx, 0], X[idx, 1], c=color, cmap=plt.cm.Paired, s=1)</span>
+
+        <span class="c1">#     plt.axis(&quot;tight&quot;)</span>
+        <span class="c1">#     plt.suptitle(&quot;Decision surface of a decision tree using paired features&quot;)</span>
+        <span class="c1">#     plt.legend()</span>
+        <span class="c1">#     fig.savefig(self.dirpath + &#39;_vs_&#39;.join(columns[0:2]), dpi=300, bbox_inches=&#39;tight&#39;)</span>
+
+
+<div class="viewcode-block" id="Decisiontree.run"><a class="viewcode-back" href="../../../gemlib.classification.html#gemlib.classification.decisiontree.Decisiontree.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">multiproc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">exceptionType</span><span class="p">,</span> <span class="n">exceptionValue</span><span class="p">,</span> <span class="n">exceptionTraceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;classifier failed!!!</span><span class="se">\n</span><span class="s2"> </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exceptionValue</span><span class="p">))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

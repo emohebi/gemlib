@@ -1,0 +1,36 @@
+{
+	"cwd": "D:/Projects/SocialMediaEventDetection/Results/test_gemlib",
+ 	"data": {
+ 		"d1": {
+ 			"type": ".csv",
+			"concat": "true",
+ 			"path": "D:/Projects/SocialMediaEventDetection/Input"
+ 		}
+ 	},
+	"preprocessing": {
+		"p1":{
+			"process": "textfeatureengineering",
+			"type": "twitter",
+			"bins": "0.2"
+		}
+	},
+ 	"tasks": {
+		"task1": {
+			"type": "topicmodelling",
+			"modelname": "lda",
+			"textcolumn": "tweet_text"
+		},
+		"task2": {
+			"type": "topicmodelling",
+			"modelname": "lda",
+			"textcolumn": "tweet_text",
+			"num_topics": "20"
+		},
+		"task3": {
+			"type": "topicmodelling",
+			"modelname": "lda",
+			"textcolumn": "tweet_text",
+			"num_topics": "30"
+		}
+	}
+}

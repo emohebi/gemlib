@@ -1,0 +1,25 @@
+{
+	"cwd": "D:/Projects/OneDrive - UNSW/SocialMediaEventDetection/Results/all_tweets_lda_40",
+ 	"data": {
+ 		"d1": {
+ 			"type": ".csv",
+			"concat": "true",
+ 			"path": "D:/Input_old"
+ 		}
+ 	},
+	"preprocessing": {
+		"p1":{
+			"process": "textfeatureengineering",
+			"type": "twitter",
+			"bins": "0.2"
+		}
+	},
+ 	"tasks": {
+		"task_lda": {
+			"type": "topicmodelling",
+			"modelname": "lda",
+			"textcolumn": "tweet_text",
+			"num_topics": "40"
+		}
+	}
+}

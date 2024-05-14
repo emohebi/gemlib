@@ -1,0 +1,980 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.classification package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib.classification.topicmodelling package" href="gemlib.classification.topicmodelling.html" />
+    <link rel="prev" title="gemlib.abstarct package" href="gemlib.abstarct.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemlib.abstarct.html">gemlib.abstarct package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemlib.classification package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gemlib-classification-classgenerators-module">gemlib.classification.classgenerators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.classvalidator">gemlib.classification.classvalidator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.confusionmatrix">gemlib.classification.confusionmatrix module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.decisiontree">gemlib.classification.decisiontree module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.deeplearning">gemlib.classification.deeplearning module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.knn">gemlib.classification.knn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.linearclassifiers">gemlib.classification.linearclassifiers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.modelvalidation">gemlib.classification.modelvalidation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.roccurve">gemlib.classification.roccurve module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification.svm">gemlib.classification.svm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.classification">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.dataloaderlayer.html">gemlib.dataloaderlayer package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.framework.html">gemlib.framework package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.visualization.html">gemlib.visualization package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+      <li>gemlib.classification package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.classification.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-classification-package">
+<h1>gemlib.classification package<a class="headerlink" href="#gemlib-classification-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gemlib.classification.topicmodelling.html">gemlib.classification.topicmodelling package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.classification.topicmodelling.tweets.html">gemlib.classification.topicmodelling.tweets package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.topicmodelling.tweets.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.topicmodelling.tweets.html#module-gemlib.classification.topicmodelling.tweets.preprocess">gemlib.classification.topicmodelling.tweets.preprocess module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.topicmodelling.tweets.html#module-gemlib.classification.topicmodelling.tweets">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#module-gemlib.classification.topicmodelling.corpusgenerator">gemlib.classification.topicmodelling.corpusgenerator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#module-gemlib.classification.topicmodelling.lda">gemlib.classification.topicmodelling.lda module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#module-gemlib.classification.topicmodelling.lsi">gemlib.classification.topicmodelling.lsi module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gemlib.classification.topicmodelling.html#module-gemlib.classification.topicmodelling">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="gemlib-classification-classgenerators-module">
+<h2>gemlib.classification.classgenerators module<a class="headerlink" href="#gemlib-classification-classgenerators-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.classification.classvalidator">
+<span id="gemlib-classification-classvalidator-module"></span><h2>gemlib.classification.classvalidator module<a class="headerlink" href="#module-gemlib.classification.classvalidator" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="gemlib.classification.classvalidator.get_cross_validation_average_score">
+<code class="sig-prename descclassname">gemlib.classification.classvalidator.</code><code class="sig-name descname">get_cross_validation_average_score</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">clf</span></em>, <em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">cross_val</span><span class="o">=</span><span class="default_value">5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/classvalidator.html#get_cross_validation_average_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.classvalidator.get_cross_validation_average_score" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.confusionmatrix">
+<span id="gemlib-classification-confusionmatrix-module"></span><h2>gemlib.classification.confusionmatrix module<a class="headerlink" href="#module-gemlib.classification.confusionmatrix" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.FP">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">FP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#FP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.FP.get_fp">
+<code class="sig-name descname">get_fp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c_tab</span></em>, <em class="sig-param"><span class="n">truth</span></em>, <em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#FP.get_fp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP.get_fp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.classification.confusionmatrix.FP.groupby_results">
+<code class="sig-name descname">groupby_results</code><em class="property"> = {}</em><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP.groupby_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.FP.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#FP.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.FP.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#FP.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.classification.confusionmatrix.FP.truth_unique_items">
+<code class="sig-name descname">truth_unique_items</code><em class="property"> = []</em><a class="headerlink" href="#gemlib.classification.confusionmatrix.FP.truth_unique_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.TP">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">TP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP.get_tp">
+<code class="sig-name descname">get_tp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c_tab</span></em>, <em class="sig-param"><span class="n">truth</span></em>, <em class="sig-param"><span class="n">key</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP.get_tp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP.get_tp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.classification.confusionmatrix.TP.groupby_results">
+<code class="sig-name descname">groupby_results</code><em class="property"> = {}</em><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP.groupby_results" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.classification.confusionmatrix.TP.truth_unique_items">
+<code class="sig-name descname">truth_unique_items</code><em class="property"> = []</em><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP.truth_unique_items" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.TP_FP">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">TP_FP</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP_FP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP_FP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP_FP.get_df">
+<code class="sig-name descname">get_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">acc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP_FP.get_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP_FP.get_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP_FP.get_tp_fp">
+<code class="sig-name descname">get_tp_fp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP_FP.get_tp_fp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP_FP.get_tp_fp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP_FP.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df_acc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP_FP.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP_FP.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.TP_FP.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#TP_FP.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.TP_FP.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.accuracy">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">accuracy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#accuracy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.accuracy.get_acc">
+<code class="sig-name descname">get_acc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#accuracy.get_acc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.accuracy.get_acc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.accuracy.get_df">
+<code class="sig-name descname">get_df</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xlabels</span></em>, <em class="sig-param"><span class="n">acc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#accuracy.get_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.accuracy.get_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.accuracy.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Xlabels</span></em>, <em class="sig-param"><span class="n">Y</span></em>, <em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">df_acc</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#accuracy.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.accuracy.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.accuracy.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#accuracy.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.accuracy.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.confusion_matrix">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">confusion_matrix</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#confusion_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.confusion_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.confusion_matrix.apply_indices">
+<code class="sig-name descname">apply_indices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c_tab</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#confusion_matrix.apply_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.confusion_matrix.apply_indices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.confusion_matrix.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">c_tab</span></em>, <em class="sig-param"><span class="n">label</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#confusion_matrix.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.confusion_matrix.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.confusion_matrix.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#confusion_matrix.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.confusion_matrix.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.confusionmatrix.event">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.confusionmatrix.</code><code class="sig-name descname">event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">truth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">predicted</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">rowindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columnindex</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groupby</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validvisualization</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">timecolumn</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">column_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keepcolumnvalues</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseConfusionDefinition" title="gemlib.abstarct.basefunctionality.BaseConfusionDefinition"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseConfusionDefinition</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.event.get_agg_df">
+<code class="sig-name descname">get_agg_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#event.get_agg_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.event.get_agg_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.event.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#event.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.event.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.confusionmatrix.event.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/confusionmatrix.html#event.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.confusionmatrix.event.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates confusion matrix from data</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.decisiontree">
+<span id="gemlib-classification-decisiontree-module"></span><h2>gemlib.classification.decisiontree module<a class="headerlink" href="#module-gemlib.classification.decisiontree" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.decisiontree.Decisiontree">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.decisiontree.</code><code class="sig-name descname">Decisiontree</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">num_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'hinge'</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">depth</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_matrix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/decisiontree.html#Decisiontree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.decisiontree.Decisiontree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.decisiontree.Decisiontree.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/decisiontree.html#Decisiontree.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.decisiontree.Decisiontree.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.decisiontree.Decisiontree.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">multiproc</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/decisiontree.html#Decisiontree.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.decisiontree.Decisiontree.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.decisiontree.Decisiontree.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/decisiontree.html#Decisiontree.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.decisiontree.Decisiontree.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.decisiontree.Decisiontree.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/decisiontree.html#Decisiontree.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.decisiontree.Decisiontree.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.deeplearning">
+<span id="gemlib-classification-deeplearning-module"></span><h2>gemlib.classification.deeplearning module<a class="headerlink" href="#module-gemlib.classification.deeplearning" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.deeplearning.</code><code class="sig-name descname">AttentionWithContext</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tensorflow.python.keras.engine.base_layer.Layer</span></code></p>
+<p>Attention operation, with a context/query vector, for temporal data.
+Supports Masking.
+Follows the work of Yang et al. [<a class="reference external" href="https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf">https://www.cs.cmu.edu/~diyiy/docs/naacl16.pdf</a>]
+“Hierarchical Attention Networks for Document Classification”
+by using a context vector to assist the attention
+# Input shape</p>
+<blockquote>
+<div><p>3D tensor with shape: <cite>(samples, steps, features)</cite>.</p>
+</div></blockquote>
+<dl class="simple">
+<dt># Output shape</dt><dd><p>2D tensor with shape: <cite>(samples, features)</cite>.</p>
+</dd>
+</dl>
+<p>How to use:
+Just put it on top of an RNN Layer
+(GRU/LSTM/SimpleRNN) with return_sequences=True.
+The dimensions are inferred based on the output shape of the RNN.
+Note: The layer has been tested with Keras 2.0.6
+.. rubric:: Example</p>
+<p>model.add(LSTM(64, return_sequences=True))
+model.add(AttentionWithContext())
+# next add a Dense layer (for classification/regression) or whatever…</p>
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.build">
+<code class="sig-name descname">build</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the variables of the layer (optional, for subclass implementers).</p>
+<p>This is a method that implementers of subclasses of <cite>Layer</cite> or <cite>Model</cite>
+can override if they need a state-creation step in-between
+layer instantiation and layer call.</p>
+<p>This is typically used to create the weights of <cite>Layer</cite> subclasses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_shape</strong> – Instance of <cite>TensorShape</cite>, or list of instances of
+<cite>TensorShape</cite> if the layer expects a list of inputs
+(one instance per input).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.call">
+<code class="sig-name descname">call</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.call" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is where the layer’s logic lives.</p>
+<p>Note here that <cite>call()</cite> method in <cite>tf.keras</cite> is little bit different
+from <cite>keras</cite> API. In <cite>keras</cite> API, you can pass support masking for
+layers as additional arguments. Whereas <cite>tf.keras</cite> has <cite>compute_mask()</cite>
+method to support masking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> – Input tensor, or list/tuple of input tensors.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments. Currently unused.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tensor or list/tuple of tensors.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.compute_mask">
+<code class="sig-name descname">compute_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">input_mask</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.compute_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.compute_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes an output mask tensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputs</strong> – Tensor or list of tensors.</p></li>
+<li><p><strong>mask</strong> – Tensor or list of tensors.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>None or a tensor (or list of tensors,</dt><dd><p>one per output tensor of the layer).</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.compute_output_shape">
+<code class="sig-name descname">compute_output_shape</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_shape</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.compute_output_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.compute_output_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the output shape of the layer.</p>
+<p>If the layer has not been built, this method will call <cite>build</cite> on the
+layer. This assumes that the layer will later be used with inputs that
+match the input shape provided here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>input_shape</strong> – Shape tuple (tuple of integers)
+or list of shape tuples (one per output tensor of the layer).
+Shape tuples can include None for free dimensions,
+instead of an integer.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An input shape tuple.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.dot_product">
+<code class="sig-name descname">dot_product</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">kernel</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.dot_product"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.dot_product" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for dot product operation, in order to be compatible with both
+Theano and Tensorflow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – input.</p></li>
+<li><p><strong>kernel</strong> – weights.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.AttentionWithContext.get_config">
+<code class="sig-name descname">get_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#AttentionWithContext.get_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.AttentionWithContext.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the config of the layer.</p>
+<p>A layer config is a Python dictionary (serializable)
+containing the configuration of a layer.
+The same layer can be reinstantiated later
+(without its trained weights) from this configuration.</p>
+<p>The config of a layer does not include connectivity
+information, nor the layer class name. These are handled
+by <cite>Network</cite> (one layer of abstraction above).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Python dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.deeplearning.DeepLearning">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.deeplearning.</code><code class="sig-name descname">DeepLearning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">num_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'hinge'</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">depth</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_matrix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_dl_ff_lstm_cnn_model">
+<code class="sig-name descname">get_dl_ff_lstm_cnn_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ff_data_1</span></em>, <em class="sig-param"><span class="n">ff_data_2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_dl_ff_lstm_cnn_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_dl_ff_lstm_cnn_model" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_embedding_layer">
+<code class="sig-name descname">get_embedding_layer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_embedding_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_embedding_layer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_feed_forward_layer">
+<code class="sig-name descname">get_feed_forward_layer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input_data</span></em>, <em class="sig-param"><span class="n">i</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_feed_forward_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_feed_forward_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>AI is creating summary for get_feed_forward_layer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_data</strong> (<em>numpy.array</em>) – input data</p></li>
+<li><p><strong>i</strong> (<em>int</em>) – index of layer. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a keras layer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_lstm_layers_with_attention">
+<code class="sig-name descname">get_lstm_layers_with_attention</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_lstm_layers_with_attention"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_lstm_layers_with_attention" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.get_text_cnn_layers">
+<code class="sig-name descname">get_text_cnn_layers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.get_text_cnn_layers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.get_text_cnn_layers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.init_number_of_classes">
+<code class="sig-name descname">init_number_of_classes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.init_number_of_classes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.init_number_of_classes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.deeplearning.DeepLearning.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/deeplearning.html#DeepLearning.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.deeplearning.DeepLearning.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.knn">
+<span id="gemlib-classification-knn-module"></span><h2>gemlib.classification.knn module<a class="headerlink" href="#module-gemlib.classification.knn" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.knn.KnnClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.knn.</code><code class="sig-name descname">KnnClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">num_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'hinge'</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">depth</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_matrix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/knn.html#KnnClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.knn.KnnClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.knn.KnnClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/knn.html#KnnClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.knn.KnnClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.knn.KnnClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/knn.html#KnnClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.knn.KnnClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.knn.KnnClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/knn.html#KnnClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.knn.KnnClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.knn.KnnClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/knn.html#KnnClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.knn.KnnClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.linearclassifiers">
+<span id="gemlib-classification-linearclassifiers-module"></span><h2>gemlib.classification.linearclassifiers module<a class="headerlink" href="#module-gemlib.classification.linearclassifiers" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.linearclassifiers.</code><code class="sig-name descname">LinearLogisticRegressionCVClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimensions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionCVClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionCVClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionCVClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionCVClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionCVClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionCVClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.linearclassifiers.</code><code class="sig-name descname">LinearLogisticRegressionClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimensions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearLogisticRegressionClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearLogisticRegressionClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.linearclassifiers.LinearRidgeClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.linearclassifiers.</code><code class="sig-name descname">LinearRidgeClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimensions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearRidgeClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearRidgeClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearRidgeClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearRidgeClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearRidgeClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearRidgeClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearRidgeClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearRidgeClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearRidgeClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearRidgeClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearRidgeClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearRidgeClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearRidgeClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearRidgeClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.linearclassifiers.LinearSvmClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.linearclassifiers.</code><code class="sig-name descname">LinearSvmClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimensions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearSvmClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearSvmClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearSvmClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearSvmClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearSvmClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearSvmClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearSvmClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearSvmClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearSvmClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearSvmClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearSvmClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.LinearSvmClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#LinearSvmClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.LinearSvmClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.classification.linearclassifiers.StochasticGradientDecent">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.linearclassifiers.</code><code class="sig-name descname">StochasticGradientDecent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dimensions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#StochasticGradientDecent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.StochasticGradientDecent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.StochasticGradientDecent.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#StochasticGradientDecent.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.StochasticGradientDecent.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.StochasticGradientDecent.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#StochasticGradientDecent.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.StochasticGradientDecent.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.StochasticGradientDecent.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#StochasticGradientDecent.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.StochasticGradientDecent.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.linearclassifiers.StochasticGradientDecent.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/linearclassifiers.html#StochasticGradientDecent.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.linearclassifiers.StochasticGradientDecent.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.modelvalidation">
+<span id="gemlib-classification-modelvalidation-module"></span><h2>gemlib.classification.modelvalidation module<a class="headerlink" href="#module-gemlib.classification.modelvalidation" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.modelvalidation.ValidateModelSingleFold">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.modelvalidation.</code><code class="sig-name descname">ValidateModelSingleFold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/modelvalidation.html#ValidateModelSingleFold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.modelvalidation.ValidateModelSingleFold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseModelValidation" title="gemlib.abstarct.basefunctionality.BaseModelValidation"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseModelValidation</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.modelvalidation.ValidateModelSingleFold.populate_train_data">
+<code class="sig-name descname">populate_train_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/modelvalidation.html#ValidateModelSingleFold.populate_train_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.modelvalidation.ValidateModelSingleFold.populate_train_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.modelvalidation.ValidateModelSingleFold.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/modelvalidation.html#ValidateModelSingleFold.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.modelvalidation.ValidateModelSingleFold.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>run the spli function</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.roccurve">
+<span id="gemlib-classification-roccurve-module"></span><h2>gemlib.classification.roccurve module<a class="headerlink" href="#module-gemlib.classification.roccurve" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.roccurve.RocCurves">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.roccurve.</code><code class="sig-name descname">RocCurves</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">truth</span></em>, <em class="sig-param"><span class="n">predicted</span></em>, <em class="sig-param"><span class="n">groupby</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span></em>, <em class="sig-param"><span class="n">title</span></em>, <em class="sig-param"><span class="n">thresholds</span></em>, <em class="sig-param"><span class="n">multi_plot</span></em>, <em class="sig-param"><span class="n">figsize</span></em>, <em class="sig-param"><span class="n">fontsize</span></em>, <em class="sig-param"><span class="n">scatter_point</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseRocCurves" title="gemlib.abstarct.basefunctionality.BaseRocCurves"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseRocCurves</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.roccurve.RocCurves.binarize_truth_signal">
+<code class="sig-name descname">binarize_truth_signal</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; List<span class="p">[</span>int<span class="p">]</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves.binarize_truth_signal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves.binarize_truth_signal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.roccurve.RocCurves.output">
+<code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.roccurve.RocCurves.roc_curve">
+<code class="sig-name descname">roc_curve</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">binned_truth</span><span class="p">:</span> <span class="n">numpy.ndarray</span></em>, <em class="sig-param"><span class="n">predicted</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves.roc_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves.roc_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run scikit-learn roc_curve</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.roccurve.RocCurves.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates Roc Curve from data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.roccurve.RocCurves.visualize">
+<code class="sig-name descname">visualize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">legends</span></em>, <em class="sig-param"><span class="n">titles</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/roccurve.html#RocCurves.visualize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.roccurve.RocCurves.visualize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.svm">
+<span id="gemlib-classification-svm-module"></span><h2>gemlib.classification.svm module<a class="headerlink" href="#module-gemlib.classification.svm" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.svm.SvmSvcClassifier">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.svm.</code><code class="sig-name descname">SvmSvcClassifier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dimensions</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alpha</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">num_iter</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">loss</span><span class="o">=</span><span class="default_value">'hinge'</span></em>, <em class="sig-param"><span class="n">kernel</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">k</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">depth</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">algo_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">input</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_train</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_test</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">embedding_matrix</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sequence_lenght</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">batch_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">epoch</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_classes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y_col_map</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">top_n</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/svm.html#SvmSvcClassifier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.svm.SvmSvcClassifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseClassifier" title="gemlib.abstarct.basefunctionality.BaseClassifier"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseClassifier</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.svm.SvmSvcClassifier.get_model">
+<code class="sig-name descname">get_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/svm.html#SvmSvcClassifier.get_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.svm.SvmSvcClassifier.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.svm.SvmSvcClassifier.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/svm.html#SvmSvcClassifier.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.svm.SvmSvcClassifier.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tasks on the model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.svm.SvmSvcClassifier.run_testing">
+<code class="sig-name descname">run_testing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/svm.html#SvmSvcClassifier.run_testing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.svm.SvmSvcClassifier.run_testing" title="Permalink to this definition">¶</a></dt>
+<dd><p>test the trained or loaded model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.svm.SvmSvcClassifier.run_training">
+<code class="sig-name descname">run_training</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">columns</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/svm.html#SvmSvcClassifier.run_training"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.svm.SvmSvcClassifier.run_training" title="Permalink to this definition">¶</a></dt>
+<dd><p>train the initialiazed or loaded model</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.classification" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.classification.topicmodelling.html" class="btn btn-neutral float-right" title="gemlib.classification.topicmodelling package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gemlib.abstarct.html" class="btn btn-neutral float-left" title="gemlib.abstarct package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

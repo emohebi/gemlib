@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.framework.pipeline &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.framework.pipeline</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.framework.pipeline</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">gemlib.validation.inputvalidation</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseClassifier</span><span class="p">,</span> <span class="n">BaseClusterer</span><span class="p">,</span> <span class="n">BaseRegressor</span><span class="p">,</span> \
+    <span class="n">BasePlotter</span><span class="p">,</span> <span class="n">BaseFeatureEngineering</span><span class="p">,</span> <span class="n">BaseConfusionDefinition</span><span class="p">,</span> <span class="n">BaseDataFilter</span><span class="p">,</span> <span class="n">BaseDataLoader</span><span class="p">,</span> \
+    <span class="n">BaseRocCurves</span><span class="p">,</span> <span class="n">BaseTextPreprocessing</span><span class="p">,</span> <span class="n">BaseTopicModelling</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">from</span> <span class="nn">gemlib.framework.knowledge</span> <span class="kn">import</span> <span class="n">BasicKnowledge</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">gemlib.visualization</span> <span class="kn">import</span> <span class="n">cmapsetup</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+
+<div class="viewcode-block" id="Pipeline"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline">[docs]</a><span class="k">class</span> <span class="nc">Pipeline</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c1"># creates a pipeline for data processing</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artifact_folder</span><span class="p">,</span> <span class="n">set_logger</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">cmapsetup</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artifact_folder</span> <span class="o">=</span> <span class="n">artifact_folder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_loaders</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">BaseDataLoader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classification</span><span class="p">:</span><span class="n">BaseClassifier</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clustering</span><span class="p">:</span><span class="n">BaseClusterer</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span><span class="p">:</span><span class="n">BaseRegressor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visualization</span><span class="p">:</span><span class="n">BasePlotter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">featureselection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">multiproc</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">task</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">preprocessings</span><span class="p">:</span><span class="n">List</span><span class="p">[</span><span class="n">preprocessing</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">knowledge</span> <span class="o">=</span> <span class="n">BasicKnowledge</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span><span class="n">Dict</span> <span class="o">=</span> <span class="p">{}</span> <span class="c1"># dictionary of data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_subdir</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prep_subdir</span> <span class="o">=</span> <span class="s1">&#39;preprocessing&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tasks_subdir</span> <span class="o">=</span> <span class="s1">&#39;tasks&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_logger</span> <span class="o">=</span> <span class="n">set_logger</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_single_task</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Pipeline.setup_pipeline_inputs"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.setup_pipeline_inputs">[docs]</a>    <span class="k">def</span> <span class="nf">setup_pipeline_inputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">validation</span> <span class="o">=</span> <span class="n">CwdValidation</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artifact_folder</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">get_valid_cwd</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_logger</span><span class="p">:</span>
+                <span class="n">logger</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">SetLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+            <span class="c1"># create &#39;data&#39; folder in cwd for staging purposes</span>
+            <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_subdir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">prep_subdir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks_subdir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="n">dataloader_validate</span> <span class="o">=</span> <span class="n">ListOfDataloaderValidation</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_loaders</span> <span class="o">=</span> <span class="n">dataloader_validate</span><span class="o">.</span><span class="n">get_valid_list_of_dataloader</span><span class="p">()</span>
+            <span class="n">preprocessing_validate</span> <span class="o">=</span> <span class="n">PreprocessingValidation</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">preprocessings</span> <span class="o">=</span> <span class="n">preprocessing_validate</span><span class="o">.</span><span class="n">get_valid_list_of_preprocessing</span><span class="p">()</span>
+            <span class="n">validation</span> <span class="o">=</span> <span class="n">TasksValidation</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artifact_folder</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="o">=</span> <span class="n">validation</span><span class="o">.</span><span class="n">get_valid_list_of_tasks</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.load_data"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.load_data">[docs]</a>    <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loaders</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;dataloader is missing in the pipeline!!!!&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+            
+            <span class="k">for</span> <span class="n">dataloader</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_loaders</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">check_if_exists_in_resources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="n">dataloader</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;skipping </span><span class="si">{</span><span class="n">dataloader</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;loading data from </span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">suffix</span><span class="p">))</span>
+                <span class="n">dataloader</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="c1"># this is cwd path</span>
+                <span class="n">dataloader</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="c1"># loaded resources (data) so far</span>
+
+                <span class="n">dict_of_data</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_stage</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">dataloader</span><span class="o">.</span><span class="n">load</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_subdir</span><span class="p">,</span> <span class="n">dataloader</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dict_of_data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dataloader</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">dataloader</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_filter"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_filter">[docs]</a>    <span class="k">def</span> <span class="nf">apply_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preprocess</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">filter</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">definedpreprocessing</span>
+            <span class="nb">filter</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">preprocessing_name</span>
+            <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">check_if_exists_in_resources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;skipping </span><span class="si">{</span><span class="nb">filter</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">filter</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">concat</span><span class="p">)</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_stage</span><span class="p">(</span><span class="nb">filter</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prep_subdir</span><span class="p">,</span> <span class="nb">filter</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;(</span><span class="si">{}</span><span class="s1">) filtering applied.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preprocess</span><span class="o">.</span><span class="n">preprocessing_name</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_feature_engineering"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_feature_engineering">[docs]</a>    <span class="k">def</span> <span class="nf">apply_feature_engineering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preprocess</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">featureengineering</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">definedpreprocessing</span>
+            <span class="k">if</span> <span class="n">featureengineering</span><span class="p">:</span>
+                <span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">preprocessing_name</span>
+                <span class="n">featureengineering</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span>
+                <span class="n">featureengineering</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span>
+                <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">check_if_exists_in_resources</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;skipping </span><span class="si">{</span><span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">if</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">input</span><span class="p">:</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">concat</span><span class="p">)</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;the type of input in </span><span class="si">{</span><span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> is: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_stage</span><span class="p">(</span><span class="n">featureengineering</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prep_subdir</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">df</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_stage</span><span class="p">(</span><span class="n">featureengineering</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prep_subdir</span><span class="p">,</span> <span class="n">featureengineering</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;(</span><span class="si">{}</span><span class="s1">) feature engineering applied.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">preprocess</span><span class="o">.</span><span class="n">preprocessing_name</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_classification"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_classification">[docs]</a>    <span class="k">def</span> <span class="nf">apply_classification</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="n">classification</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+        <span class="n">classification</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">task_name</span>
+        <span class="n">classification</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span>
+        <span class="n">classification</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+        <span class="k">if</span> <span class="n">classification</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">classification</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+        <span class="c1"># classification.df = self.df.copy(deep=True)</span>
+        <span class="c1"># classification.target = self.classdefinition.target</span>
+        <span class="n">classification</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_clustering"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_clustering">[docs]</a>    <span class="k">def</span> <span class="nf">apply_clustering</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="n">clustering</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+        <span class="k">if</span> <span class="n">clustering</span><span class="o">.</span><span class="n">dimensions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">20</span><span class="p">:</span>
+                <span class="n">clustering</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;too many columns in clustering calculation!!! [max: 20], ignoring clustering...&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="n">clustering</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+        <span class="n">clustering</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">clustering</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_confusion_matrix"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_confusion_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">apply_confusion_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">confusion</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+            <span class="n">confusion</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+            <span class="n">confusion</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">confusion</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">title</span>
+            <span class="k">if</span> <span class="n">confusion</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">confusion</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">confusion</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">confusion</span><span class="o">.</span><span class="n">validvisualization</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">]:</span>
+                    <span class="c1"># confusion.validvisualization.definedtask.title = data</span>
+                    <span class="n">confusion</span><span class="o">.</span><span class="n">validvisualization</span><span class="o">.</span><span class="n">cwd</span> <span class="o">=</span> <span class="n">confusion</span><span class="o">.</span><span class="n">dirpath</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_visualization</span><span class="p">(</span><span class="n">confusion</span><span class="o">.</span><span class="n">validvisualization</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">][</span><span class="n">data</span><span class="p">])</span>
+
+            <span class="k">return</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_roc_curve"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_roc_curve">[docs]</a>    <span class="k">def</span> <span class="nf">apply_roc_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">roc_curve</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+            <span class="n">roc_curve</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+            <span class="n">roc_curve</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">roc_curve</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">title</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_regression"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_regression">[docs]</a>    <span class="k">def</span> <span class="nf">apply_regression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="n">regression</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+        <span class="n">regression</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+        <span class="n">regression</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">regression</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">regression</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">regression</span><span class="o">.</span><span class="n">features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">regression</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">2000</span><span class="p">:</span>
+                <span class="n">regression</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">regression</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span> <span class="o">-</span> <span class="nb">set</span><span class="p">([</span><span class="n">regression</span><span class="o">.</span><span class="n">target</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;too many columns in clustering calculation!!! [max: 2000], ignoring regression...&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">regression</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">refine_lists</span><span class="p">(</span><span class="n">regression</span><span class="o">.</span><span class="n">features</span><span class="p">,</span> 
+                                                         <span class="n">regression</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">regression</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_visualization"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_visualization">[docs]</a>    <span class="k">def</span> <span class="nf">apply_visualization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">plotter</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+            <span class="k">if</span> <span class="n">df</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">plotter</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">df</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">plotter</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># if plotter.columns is None:</span>
+            <span class="c1">#     if len(plotter.df.columns) &lt;= 20:</span>
+            <span class="c1">#         plotter.columns = plotter.df.columns.tolist()</span>
+            <span class="c1">#     else:</span>
+            <span class="c1">#         utilities._info(&#39;too many columns in visualization!!! [max: 20], ignoring plotting...&#39;)</span>
+            <span class="c1">#         return</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+            <span class="k">if</span> <span class="n">plotter</span><span class="o">.</span><span class="n">validpreprocessing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">plotter</span><span class="o">.</span><span class="n">validpreprocessing</span><span class="p">)</span>
+            <span class="c1"># plotter.df = plotter.df.round(1)</span>
+            <span class="n">plotter</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_textpreprocessing"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_textpreprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">apply_textpreprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">preprocess</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">txtpreprocessing</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">definedpreprocessing</span>
+            <span class="k">if</span> <span class="n">txtpreprocessing</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">txtpreprocessing</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;text preprocesisng.... len(</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">txtpreprocessing</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">preprocess</span><span class="o">.</span><span class="n">preprocessing_name</span><span class="si">}</span><span class="s1">) txtpreprocessing applied. len(</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">df</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_topicmodelling"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_topicmodelling">[docs]</a>    <span class="k">def</span> <span class="nf">apply_topicmodelling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tmodelling</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+            <span class="n">tmodelling</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+            <span class="n">tmodelling</span><span class="o">.</span><span class="n">corpus_object</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span> <span class="k">if</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">task</span><span class="o">.</span><span class="n">cwd</span>
+            <span class="n">tmodelling</span><span class="o">.</span><span class="n">taskname</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">task_name</span>
+            <span class="n">tmodelling</span><span class="o">.</span><span class="n">corpus_object</span><span class="o">.</span><span class="n">taskname</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">task_name</span>
+            <span class="n">tmodelling</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tmodelling</span><span class="o">.</span><span class="n">preprocessing</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;going for preprocessing... len(</span><span class="si">{</span><span class="n">tmodelling</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">(</span><span class="n">tmodelling</span><span class="o">.</span><span class="n">preprocessing</span><span class="p">)</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;going for topic modelling.... len(</span><span class="si">{</span><span class="n">tmodelling</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmodelling</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">tmodelling</span><span class="o">.</span><span class="n">validvisualization</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">]:</span>
+                    <span class="c1"># confusion.validvisualization.definedtask.title = data</span>
+                    <span class="n">tmodelling</span><span class="o">.</span><span class="n">validvisualization</span><span class="o">.</span><span class="n">cwd</span> <span class="o">=</span> <span class="n">tmodelling</span><span class="o">.</span><span class="n">output_dir</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_visualization</span><span class="p">(</span><span class="n">tmodelling</span><span class="o">.</span><span class="n">validvisualization</span><span class="p">,</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">[</span><span class="n">task</span><span class="o">.</span><span class="n">task_name</span><span class="p">][</span><span class="n">data</span><span class="p">])</span>
+
+            <span class="k">return</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pipeline.apply_write_to_db"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_write_to_db">[docs]</a>    <span class="k">def</span> <span class="nf">apply_write_to_db</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span><span class="n">task</span><span class="p">):</span>
+        <span class="n">db</span> <span class="o">=</span> <span class="n">task</span><span class="o">.</span><span class="n">definedtask</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">write</span><span class="p">()</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_single_preprocessing"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_single_preprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">apply_single_preprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">process</span><span class="p">:</span><span class="n">preprocessing</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">definedpreprocessing</span><span class="p">,</span> <span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_feature_engineering</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">definedpreprocessing</span><span class="p">,</span> <span class="n">BaseDataFilter</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_filter</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">process</span><span class="o">.</span><span class="n">definedpreprocessing</span><span class="p">,</span> <span class="n">BaseTextPreprocessing</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_textpreprocessing</span><span class="p">(</span><span class="n">process</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_single_task"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_single_task">[docs]</a>    <span class="k">def</span> <span class="nf">apply_single_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseClassifier</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_classification</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseClusterer</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_clustering</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseRegressor</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_regression</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseConfusionDefinition</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_confusion_matrix</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseDataLoader</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_write_to_db</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseRocCurves</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_roc_curve</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BasePlotter</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_visualization</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">definedtask</span><span class="p">,</span> <span class="n">BaseTopicModelling</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">apply_topicmodelling</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_preprocessing"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_preprocessing">[docs]</a>    <span class="k">def</span> <span class="nf">apply_preprocessing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">preprocessings</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">preprocessings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">preprocessings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocessings</span>
+        <span class="k">if</span> <span class="n">preprocessings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span> 
+            <span class="k">for</span> <span class="n">process</span> <span class="ow">in</span> <span class="n">preprocessings</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_single_preprocessing</span><span class="p">(</span><span class="n">process</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">exceptionType</span><span class="p">,</span> <span class="n">exceptionValue</span><span class="p">,</span> <span class="n">exceptionTraceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;running preprocessing list failed!!!</span><span class="se">\n</span><span class="s2"> </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exceptionValue</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Pipeline.apply_tasks"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.apply_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">apply_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiproc</span><span class="p">:</span>  <span class="c1"># only helpful when tasks complexities are same</span>
+                <span class="n">pool</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">)</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tasks</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_single_task</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">exceptionType</span><span class="p">,</span> <span class="n">exceptionValue</span><span class="p">,</span> <span class="n">exceptionTraceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;running tasks failed!!!</span><span class="se">\n</span><span class="s2"> </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exceptionValue</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Pipeline.run"><a class="viewcode-back" href="../../../gemlib.framework.html#gemlib.framework.pipeline.Pipeline.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">load_resources_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">object</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="n">DATA_LOADER</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="n">PREPROCESSING</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_preprocessing</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="n">TASKS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_tasks</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;resources </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s1"> loaded.&#39;</span><span class="p">)</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">stage_resources_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">exceptionType</span><span class="p">,</span> <span class="n">exceptionValue</span><span class="p">,</span> <span class="n">exceptionTraceback</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s2">&quot;running pipeline failed!!!</span><span class="se">\n</span><span class="s2"> </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exceptionValue</span><span class="p">))</span></div></div>
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

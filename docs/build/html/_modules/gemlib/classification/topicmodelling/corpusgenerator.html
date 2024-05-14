@@ -1,0 +1,445 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.classification.topicmodelling.corpusgenerator &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.classification.topicmodelling.corpusgenerator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.classification.topicmodelling.corpusgenerator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1"># Gensim</span>
+<span class="kn">import</span> <span class="nn">gensim</span>
+<span class="kn">import</span> <span class="nn">gensim.corpora</span> <span class="k">as</span> <span class="nn">corpora</span>
+<span class="kn">from</span> <span class="nn">gensim.utils</span> <span class="kn">import</span> <span class="n">simple_preprocess</span>
+<span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseTopicModelling</span>
+<span class="c1"># spacy for lemmatization</span>
+<span class="c1">#import spacy</span>
+
+<span class="c1"># Plotting tools</span>
+<span class="c1">#import pyLDAvis</span>
+<span class="c1">#import pyLDAvis.gensim  # don&#39;t skip this</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">nltk</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;stopwords&#39;</span><span class="p">)</span>
+<span class="n">nltk</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="s1">&#39;wordnet&#39;</span><span class="p">)</span>
+
+<span class="c1"># Enable logging for gensim - optional</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> : </span><span class="si">%(levelname)s</span><span class="s1"> : </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+<span class="n">directory</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;D:\Projects\SocialMediaEventDetection&quot;</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span><span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">stopwords</span>
+<span class="n">stop_words</span> <span class="o">=</span> <span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">)</span>
+<span class="n">stop_words</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s1">&#39;from&#39;</span><span class="p">,</span> <span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="s1">&#39;edu&#39;</span><span class="p">,</span> <span class="s1">&#39;use&#39;</span><span class="p">])</span>
+<span class="kn">from</span> <span class="nn">nltk.corpus</span> <span class="kn">import</span> <span class="n">wordnet</span>
+<span class="n">wn_lemmas</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">wordnet</span><span class="o">.</span><span class="n">all_lemma_names</span><span class="p">())</span>
+<span class="c1">#nlp = spacy.load(&#39;en&#39;, disable=[&#39;parser&#39;, &#39;ner&#39;])</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="n">ascii_chars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">printable</span><span class="p">)</span>  <span class="c1"># speeds things up</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">from</span> <span class="nn">gensim.models.ldamulticore</span> <span class="kn">import</span> <span class="n">LdaMulticore</span>
+<span class="kn">from</span> <span class="nn">gensim.models.tfidfmodel</span> <span class="kn">import</span> <span class="n">TfidfModel</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<div class="viewcode-block" id="Corpus"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus">[docs]</a><span class="k">class</span> <span class="nc">Corpus</span><span class="p">(</span><span class="n">BaseTopicModelling</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Corpus.preprocess_data"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.preprocess_data">[docs]</a>    <span class="k">def</span> <span class="nf">preprocess_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sent</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="n">highpoints</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">u</span><span class="s1">&#39;[</span><span class="se">\uD800</span><span class="s1">-</span><span class="se">\uDBFF</span><span class="s1">][</span><span class="se">\uDC00</span><span class="s1">-</span><span class="se">\uDFFF</span><span class="s1">]&#39;</span><span class="p">)</span>
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^\w\s]&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="n">stoplist</span> <span class="o">=</span> <span class="p">[</span><span class="sa">u</span><span class="s1">&#39;merc</span><span class="se">\xe8</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;lamerc</span><span class="se">\xe8</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="n">stoplist</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+
+        <span class="c1"># remove urls</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()&lt;&gt;]+&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;|\(([^\s()&lt;&gt;]+|(\([^\s()&lt;&gt;]+\)))*\))&#39;</span>
+            <span class="sa">r</span><span class="s1">&#39;+(?:\(([^\s()&lt;&gt;]+|(\([^\s()&lt;&gt;]+\)))*\)|[^\s`!()\[\]</span><span class="si">{}</span><span class="s1">;:</span><span class="se">\&#39;</span><span class="s1">&quot;.,&lt;&gt;?«»“”‘’]))&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">hit</span><span class="p">)</span> <span class="k">for</span> <span class="n">hit</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># remove emojii</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">highpoints</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># remove numbers</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;\d+&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># remove mentions and the hash sign</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;(@[A-Za-z0-9]+)&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">pre</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">tweet</span><span class="p">)</span> <span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># Remove Emails</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\S*@\S*\s?&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;amp&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># Remove new line characters</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># Remove distracting single quotes</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\&#39;</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+        <span class="n">emoji_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[&quot;</span>
+                                   <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\U0001F600</span><span class="s2">-</span><span class="se">\U0001F64F</span><span class="s2">&quot;</span>  <span class="c1"># emoticons</span>
+                                   <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\U0001F300</span><span class="s2">-</span><span class="se">\U0001F5FF</span><span class="s2">&quot;</span>  <span class="c1"># symbols &amp; pictographs</span>
+                                   <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\U0001F680</span><span class="s2">-</span><span class="se">\U0001F6FF</span><span class="s2">&quot;</span>  <span class="c1"># transport &amp; map symbols</span>
+                                   <span class="sa">u</span><span class="s2">&quot;</span><span class="se">\U0001F1E0</span><span class="s2">-</span><span class="se">\U0001F1FF</span><span class="s2">&quot;</span>  <span class="c1"># flags (iOS)</span>
+                                   <span class="s2">&quot;]+&quot;</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">UNICODE</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">emoji_pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+        <span class="c1"># pprint(data[:10])</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+<div class="viewcode-block" id="Corpus.remove_low_freq_words"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.remove_low_freq_words">[docs]</a>    <span class="k">def</span> <span class="nf">remove_low_freq_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="n">word_freq</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span> <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sent</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span> <span class="k">continue</span>
+                <span class="n">word_freq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([[</span><span class="n">m</span><span class="p">,</span> <span class="n">word_freq</span><span class="p">[</span><span class="n">m</span><span class="p">]]</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">word_freq</span><span class="p">],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;term&#39;</span><span class="p">,</span> <span class="s1">&#39;freq&#39;</span><span class="p">])</span>
+        <span class="c1"># df = df[df[&#39;freq&#39;] &gt; 300]</span>
+        <span class="n">terms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">term</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">terms</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span>
+        <span class="n">texts_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">])</span>
+        <span class="n">mask_low_freq</span> <span class="o">=</span> <span class="n">texts_len</span> <span class="o">&gt;</span> <span class="mi">1</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">sent</span> <span class="k">for</span> <span class="n">sent</span> <span class="ow">in</span> <span class="n">texts</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sent</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">texts</span><span class="p">,</span> <span class="n">mask_low_freq</span></div>
+
+<div class="viewcode-block" id="Corpus.remove_non_ascii_prinatble_from_list"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.remove_non_ascii_prinatble_from_list">[docs]</a>    <span class="k">def</span> <span class="nf">remove_non_ascii_prinatble_from_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">doc</span> <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">char</span> <span class="ow">in</span> <span class="n">ascii_chars</span> <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">word</span><span class="p">)]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Corpus.sent_to_words"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.sent_to_words">[docs]</a>    <span class="k">def</span> <span class="nf">sent_to_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sentences</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">sentence</span> <span class="ow">in</span> <span class="n">sentences</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">simple_preprocess</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sentence</span><span class="p">),</span> <span class="n">deacc</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>  <span class="c1"># deacc=True removes punctuations</span></div>
+
+
+    <span class="c1"># Define functions for stopwords, bigrams, trigrams and lemmatization</span>
+<div class="viewcode-block" id="Corpus.remove_stopwords"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.remove_stopwords">[docs]</a>    <span class="k">def</span> <span class="nf">remove_stopwords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">simple_preprocess</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">stop_words</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Corpus.remove_non_english_words"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.remove_non_english_words">[docs]</a>    <span class="k">def</span> <span class="nf">remove_non_english_words</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="n">word</span> <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">simple_preprocess</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span> <span class="k">if</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">wn_lemmas</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Corpus.make_bigrams"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.make_bigrams">[docs]</a>    <span class="k">def</span> <span class="nf">make_bigrams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">,</span> <span class="n">bigram_mod</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">bigram_mod</span><span class="p">[</span><span class="n">doc</span><span class="p">]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Corpus.make_trigrams"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.make_trigrams">[docs]</a>    <span class="k">def</span> <span class="nf">make_trigrams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">,</span> <span class="n">bigram_mod</span><span class="p">,</span> <span class="n">trigram_mod</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">trigram_mod</span><span class="p">[</span><span class="n">bigram_mod</span><span class="p">[</span><span class="n">doc</span><span class="p">]]</span> <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Corpus.lemmatization"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.lemmatization">[docs]</a>    <span class="k">def</span> <span class="nf">lemmatization</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="p">,</span> <span class="n">allowed_postags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NOUN&#39;</span><span class="p">,</span> <span class="s1">&#39;ADJ&#39;</span><span class="p">,</span> <span class="s1">&#39;VERB&#39;</span><span class="p">,</span> <span class="s1">&#39;ADV&#39;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;https://spacy.io/api/annotation&quot;&quot;&quot;</span>
+        <span class="n">texts_out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1">#for sent in texts:</span>
+        <span class="c1">#    doc = nlp(&quot; &quot;.join(sent))</span>
+        <span class="c1">#    texts_out.append([token.lemma_ for token in doc if token.pos_ in allowed_postags])</span>
+        <span class="k">return</span> <span class="n">texts_out</span></div>
+
+<div class="viewcode-block" id="Corpus.get_preprocessed_data"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.get_preprocessed_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_preprocessed_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">preprocess_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data_words</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sent_to_words</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+
+        <span class="c1"># utilities._info(data_words[:1])</span>
+        <span class="c1"># Build the bigram and trigram models</span>
+        <span class="n">bigram</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Phrases</span><span class="p">(</span><span class="n">data_words</span><span class="p">,</span> <span class="n">min_count</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># higher threshold fewer phrases.</span>
+        <span class="c1"># trigram = gensim.models.Phrases(bigram[data_words], threshold=10)</span>
+
+        <span class="c1"># Faster way to get a sentence clubbed as a trigram/bigram</span>
+        <span class="n">bigram_mod</span> <span class="o">=</span> <span class="n">gensim</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">phrases</span><span class="o">.</span><span class="n">Phraser</span><span class="p">(</span><span class="n">bigram</span><span class="p">)</span>
+        <span class="c1"># trigram_mod = gensim.models.phrases.Phraser(trigram)</span>
+
+        <span class="c1"># See trigram example</span>
+        <span class="c1"># utilities._info(trigram_mod[bigram_mod[data_words[0]]])</span>
+
+        <span class="c1"># Remove Stop Words</span>
+        <span class="n">data_words_nostops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_stopwords</span><span class="p">(</span><span class="n">data_words</span><span class="p">)</span>
+
+        <span class="c1"># remove non english char words</span>
+        <span class="n">data_words_nostops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_non_ascii_prinatble_from_list</span><span class="p">(</span><span class="n">data_words_nostops</span><span class="p">)</span>
+
+        <span class="n">data_words_nostops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_non_english_words</span><span class="p">(</span><span class="n">data_words_nostops</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_phrases</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;extracting phrases (bigrams)...&#39;</span><span class="p">)</span>
+            <span class="c1"># Form Bigrams</span>
+            <span class="n">data_words_nostops</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_bigrams</span><span class="p">(</span><span class="n">data_words_nostops</span><span class="p">,</span> <span class="n">bigram_mod</span><span class="p">)</span>  <span class="c1"># , trigram_mod)</span>
+
+        <span class="c1"># Do lemmatization keeping only noun, adj, vb, adv</span>
+        <span class="n">data_lemmatized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lemmatization</span><span class="p">(</span><span class="n">data_words_nostops</span><span class="p">,</span> <span class="n">allowed_postags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;NOUN&#39;</span><span class="p">])</span>  <span class="c1"># &#39;ADJ&#39;, , &#39;ADV&#39;, &#39;VERB&#39;</span>
+        <span class="c1"># utilities._info(data_lemmatized[:1])</span>
+
+        <span class="c1"># Remove Stop Words again</span>
+        <span class="n">data_lemmatized</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">remove_stopwords</span><span class="p">(</span><span class="n">data_lemmatized</span><span class="p">)</span>
+
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;len data before filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_lemmatized</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">mask_low_freq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># data_lemmatized, mask_low_freq = self.remove_low_freq_words(data_lemmatized)</span>
+
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;len data after filtering: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data_lemmatized</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data_lemmatized</span><span class="p">,</span> <span class="n">mask_low_freq</span></div>
+
+<div class="viewcode-block" id="Corpus.get_corpus"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.get_corpus">[docs]</a>    <span class="k">def</span> <span class="nf">get_corpus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="n">data_lemmatized</span><span class="p">,</span> <span class="n">mask_low_freq</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_preprocessed_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="c1"># Create Dictionary</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">corpora</span><span class="o">.</span><span class="n">Dictionary</span><span class="p">(</span><span class="n">data_lemmatized</span><span class="p">)</span>
+
+        <span class="c1"># Filter the terms which have occured in less than 3 articles and more than 40% of the articles</span>
+        <span class="c1"># if not self.allowext:</span>
+        <span class="c1">#     dictionary.filter_extremes(no_below=4, no_above=0.4)</span>
+
+        <span class="c1"># List of some words which has to be removed from dictionary as they are content neutral words</span>
+        <span class="n">stoplist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="s1">&#39;Fuck fuck shit hahaha haha hahahaha OMG omg&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
+        <span class="n">stop_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">dictionary</span><span class="o">.</span><span class="n">token2id</span><span class="p">[</span><span class="n">stopword</span><span class="p">]</span> <span class="k">for</span> <span class="n">stopword</span> <span class="ow">in</span> <span class="n">stoplist</span> <span class="k">if</span> <span class="n">stopword</span> <span class="ow">in</span> <span class="n">dictionary</span><span class="o">.</span><span class="n">token2id</span><span class="p">]</span>
+        <span class="n">dictionary</span><span class="o">.</span><span class="n">filter_tokens</span><span class="p">(</span><span class="n">stop_ids</span><span class="p">)</span>
+
+        <span class="c1"># Create Corpus</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;data_lemmatized_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">taskname</span><span class="si">}</span><span class="s1">.pkl&#39;</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data_lemmatized</span><span class="p">,</span> <span class="n">cfile</span><span class="p">)</span>
+            <span class="n">cfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;data_lemmatized pickled...&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;data_lemmatized dumping is failed .. it is ignored...&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dictionary_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">taskname</span><span class="si">}</span><span class="s1">.pkl&#39;</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">cfile</span><span class="p">)</span>
+            <span class="n">cfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;dictionary pickled...&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;dictionary dumping is failed .. it is ignored...&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Term Document Frequency</span>
+        <span class="n">corpus</span> <span class="o">=</span> <span class="p">[</span><span class="n">dictionary</span><span class="o">.</span><span class="n">doc2bow</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">data_lemmatized</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_tfidf</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;tf/idf modelling...&#39;</span><span class="p">)</span>
+            <span class="n">tfidf</span> <span class="o">=</span> <span class="n">TfidfModel</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span>
+            <span class="n">corpus</span> <span class="o">=</span> <span class="n">tfidf</span><span class="p">[</span><span class="n">corpus</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;corpus_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">taskname</span><span class="si">}</span><span class="s1">.pkl&#39;</span><span class="p">)),</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">corpus</span><span class="p">,</span> <span class="n">cfile</span><span class="p">)</span>
+            <span class="n">cfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;corpus pickled...&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;corpus dumping is failed .. it is ignored...&#39;</span><span class="p">)</span>
+            <span class="k">pass</span>
+        <span class="c1"># View</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;len of corpus: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span><span class="si">}</span><span class="s1"> ...&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">corpus</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_num_docs</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">corpus</span><span class="p">,</span> <span class="n">dictionary</span><span class="p">,</span> <span class="n">mask_low_freq</span></div>
+
+<div class="viewcode-block" id="Corpus.get_model"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.get_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Corpus.run"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Corpus.output_topics"><a class="viewcode-back" href="../../../../gemlib.classification.topicmodelling.html#gemlib.classification.topicmodelling.corpusgenerator.Corpus.output_topics">[docs]</a>    <span class="k">def</span> <span class="nf">output_topics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_df</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

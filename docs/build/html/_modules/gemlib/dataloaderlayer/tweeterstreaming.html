@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.dataloaderlayer.tweeterstreaming &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.dataloaderlayer.tweeterstreaming</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.dataloaderlayer.tweeterstreaming</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">tweepy</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">tweepy.streaming</span> <span class="kn">import</span> <span class="n">StreamListener</span>
+<span class="kn">from</span> <span class="nn">tweepy</span> <span class="kn">import</span> <span class="n">OAuthHandler</span>
+<span class="kn">from</span> <span class="nn">tweepy</span> <span class="kn">import</span> <span class="n">Stream</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseDataLoader</span>
+<span class="kn">from</span> <span class="nn">gemlib.classification.topicmodelling.tweets.preprocess</span> <span class="kn">import</span> <span class="n">TwitterPreprocessing</span>
+
+<span class="n">consumer_key</span> <span class="o">=</span> <span class="s1">&#39;N0GtV5tWVp04RSBMWfa15egKa&#39;</span>
+<span class="n">consumer_secret</span> <span class="o">=</span> <span class="s1">&#39;KVCEp1rm2W5HYD3aerJodgIy8iEH8L1Q5OZvdgWsA41rRzJr9F&#39;</span>
+<span class="n">access_token</span> <span class="o">=</span> <span class="s1">&#39;789068201883602944-yUIhxzGymCHrVU1K5Zxc0qkqxtCYqnx&#39;</span>
+<span class="n">access_token_secret</span> <span class="o">=</span> <span class="s1">&#39;FbMareIEtDHQPxBIv4r0Q3qRwNvk9ULXQd6Qub9fE16cF&#39;</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">OAuthHandler</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">set_access_token</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">access_token_secret</span><span class="p">)</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">wait_on_rate_limit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">location_bbox</span><span class="o">=</span><span class="p">[</span><span class="mf">110.917969</span><span class="p">,</span><span class="o">-</span><span class="mf">39.300299</span><span class="p">,</span><span class="mf">156.796875</span><span class="p">,</span><span class="o">-</span><span class="mf">10.919618</span><span class="p">]</span>
+<span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;tweet.id_str&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.created_at&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet_text&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.geo&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.coordinates&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.place&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.retweet_count&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.favorite_count&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.retweeted&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.source&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.user.id_str&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.user.location&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.user.follower_count&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.user.friends_count&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;tweet.user.geo_enabled&#39;</span><span class="p">]</span>
+
+
+<span class="c1"># streaming</span>
+<div class="viewcode-block" id="StdOutListener"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener">[docs]</a><span class="k">class</span> <span class="nc">StdOutListener</span><span class="p">(</span><span class="n">StreamListener</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A listener handles tweets that are received from the stream.</span>
+<span class="sd">    This is a basic listener that just prints received tweets to stdout.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">list_tweets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">streamfilename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">tweet_count_threshold</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<div class="viewcode-block" id="StdOutListener.on_status"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_status">[docs]</a>    <span class="k">def</span> <span class="nf">on_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tweet</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retweeted</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># if (&#39;event&#39; not in status.text.lower()) and (&#39;concert&#39; not in status.text.lower()) :</span>
+        <span class="c1">#             return</span>
+
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tweet</span><span class="p">,</span> <span class="s1">&#39;retweeted_status&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retweeted_status</span><span class="o">.</span><span class="n">extended_tweet</span><span class="p">[</span><span class="s2">&quot;full_text&quot;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">retweeted_status</span><span class="o">.</span><span class="n">text</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">extended_tweet</span><span class="p">[</span><span class="s2">&quot;full_text&quot;</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">text</span>
+
+        <span class="n">tweet_dict</span> <span class="o">=</span> <span class="n">tweet</span><span class="o">.</span><span class="n">_json</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">tweet</span><span class="o">.</span><span class="n">id_str</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">created_at</span><span class="p">,</span>
+                  <span class="nb">str</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)),</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">geo</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span>
+                  <span class="nb">str</span><span class="p">(</span><span class="n">tweet_dict</span><span class="p">[</span><span class="s1">&#39;place&#39;</span><span class="p">]),</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">retweet_count</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">favorite_count</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">retweeted</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">source</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">id_str</span><span class="p">,</span>
+                  <span class="nb">str</span><span class="p">(</span><span class="n">tweet_dict</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">][</span><span class="s1">&#39;location&#39;</span><span class="p">]),</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">followers_count</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">friends_count</span><span class="p">,</span>
+                  <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">geo_enabled</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_tweets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H-%M-%S&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total tweets until </span><span class="si">{</span><span class="n">dt</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">counter</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">counter</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">tweet_count_threshold</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">list_tweets</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;null&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">list_tweets</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="c1"># preprocessing</span>
+                <span class="n">preproc</span> <span class="o">=</span> <span class="n">TwitterPreprocessing</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">preproc</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">streamfilename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="StdOutListener.on_error"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_error">[docs]</a>    <span class="k">def</span> <span class="nf">on_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">status_code</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="mi">420</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div></div>
+
+<div class="viewcode-block" id="TweetStreamer"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer">[docs]</a><span class="k">class</span> <span class="nc">TweetStreamer</span><span class="p">(</span><span class="n">BaseDataLoader</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TweetStreamer.start_stream"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.start_stream">[docs]</a>    <span class="k">def</span> <span class="nf">start_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">auth</span><span class="p">,</span> <span class="n">listener</span><span class="p">):</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">stream</span> <span class="o">=</span> <span class="n">Stream</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">listener</span><span class="p">)</span>
+                <span class="n">stream</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">locations</span><span class="o">=</span><span class="n">location_bbox</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exception</span><span class="p">:</span>
+                <span class="n">Logging</span><span class="o">.</span><span class="n">log_exception</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;restarting the stream...&#39;</span><span class="p">)</span>
+                <span class="k">continue</span></div>
+
+<div class="viewcode-block" id="TweetStreamer.create_output_header"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.create_output_header">[docs]</a>    <span class="k">def</span> <span class="nf">create_output_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># create a new streaming file</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvFile</span><span class="p">:</span>
+            <span class="n">csvWriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvFile</span><span class="p">)</span>
+            <span class="n">csvWriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TweetStreamer.stream_runner"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.stream_runner">[docs]</a>    <span class="k">def</span> <span class="nf">stream_runner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># streaming runner</span>
+        <span class="n">listener</span> <span class="o">=</span> <span class="n">StdOutListener</span><span class="p">()</span>
+        <span class="n">listener</span><span class="o">.</span><span class="n">streamfilename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span>
+        <span class="n">listener</span><span class="o">.</span><span class="n">tweet_count_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tweet_counter</span>
+        <span class="n">auth</span> <span class="o">=</span> <span class="n">OAuthHandler</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span>
+        <span class="n">auth</span><span class="o">.</span><span class="n">set_access_token</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">access_token_secret</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_output_header</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_stream</span><span class="p">(</span><span class="n">auth</span><span class="p">,</span> <span class="n">listener</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TweetStreamer.load"><a class="viewcode-back" href="../../../gemlib.dataloaderlayer.html#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stream_runner</span><span class="p">()</span></div></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Tweet project streaming&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-f&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;filePath&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;tweetThr&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">streaming</span> <span class="o">=</span> <span class="n">TweetStreamer</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">f</span><span class="p">,</span> <span class="n">tweet_counter</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">streaming</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

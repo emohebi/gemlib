@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.classification.topicmodelling.tweets package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib.clustering package" href="gemlib.clustering.html" />
+    <link rel="prev" title="gemlib.classification.topicmodelling package" href="gemlib.classification.topicmodelling.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemlib.abstarct.html">gemlib.abstarct package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="gemlib.classification.html">gemlib.classification package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="gemlib.classification.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#gemlib-classification-classgenerators-module">gemlib.classification.classgenerators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.classvalidator">gemlib.classification.classvalidator module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.confusionmatrix">gemlib.classification.confusionmatrix module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.decisiontree">gemlib.classification.decisiontree module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.deeplearning">gemlib.classification.deeplearning module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.knn">gemlib.classification.knn module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.linearclassifiers">gemlib.classification.linearclassifiers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.modelvalidation">gemlib.classification.modelvalidation module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.roccurve">gemlib.classification.roccurve module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification.svm">gemlib.classification.svm module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="gemlib.classification.html#module-gemlib.classification">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.dataloaderlayer.html">gemlib.dataloaderlayer package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.framework.html">gemlib.framework package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.visualization.html">gemlib.visualization package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+          <li><a href="gemlib.classification.html">gemlib.classification package</a> &raquo;</li>
+        
+          <li><a href="gemlib.classification.topicmodelling.html">gemlib.classification.topicmodelling package</a> &raquo;</li>
+        
+      <li>gemlib.classification.topicmodelling.tweets package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.classification.topicmodelling.tweets.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-classification-topicmodelling-tweets-package">
+<h1>gemlib.classification.topicmodelling.tweets package<a class="headerlink" href="#gemlib-classification-topicmodelling-tweets-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.classification.topicmodelling.tweets.preprocess">
+<span id="gemlib-classification-topicmodelling-tweets-preprocess-module"></span><h2>gemlib.classification.topicmodelling.tweets.preprocess module<a class="headerlink" href="#module-gemlib.classification.topicmodelling.tweets.preprocess" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.classification.topicmodelling.tweets.preprocess.</code><code class="sig-name descname">TwitterPreprocessing</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseTextPreprocessing" title="gemlib.abstarct.basefunctionality.BaseTextPreprocessing"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseTextPreprocessing</span></code></a></p>
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.add_features">
+<code class="sig-name descname">add_features</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.add_features"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.add_features" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.apply">
+<code class="sig-name descname">apply</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.apply" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the modelling</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_cordinates">
+<code class="sig-name descname">get_cordinates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.get_cordinates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_cordinates" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_df">
+<code class="sig-name descname">get_df</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.get_df"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.get_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.parse_place">
+<code class="sig-name descname">parse_place</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">val</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.parse_place"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.parse_place" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.preprocess_tweets">
+<code class="sig-name descname">preprocess_tweets</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span><span class="p">:</span> <span class="n">pandas.core.frame.DataFrame</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/classification/topicmodelling/tweets/preprocess.html#TwitterPreprocessing.preprocess_tweets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.classification.topicmodelling.tweets.preprocess.TwitterPreprocessing.preprocess_tweets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.classification.topicmodelling.tweets">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.classification.topicmodelling.tweets" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.clustering.html" class="btn btn-neutral float-right" title="gemlib.clustering package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gemlib.classification.topicmodelling.html" class="btn btn-neutral float-left" title="gemlib.classification.topicmodelling package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

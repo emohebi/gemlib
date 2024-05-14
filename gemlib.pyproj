@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1fc332b6-63c0-4346-a1db-a840b07be0ca}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile>gemlib\gemlibmain.py</StartupFile>
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="gemlib\abstarct\basefunctionality.py" />
+    <Compile Include="gemlib\abstarct\baseoutput.py" />
+    <Compile Include="gemlib\abstarct\basetask.py" />
+    <Compile Include="gemlib\abstarct\__init__.py" />
+    <Compile Include="gemlib\classification\classgenerators.py" />
+    <Compile Include="gemlib\classification\classvalidator.py" />
+    <Compile Include="gemlib\classification\confusionmatrix.py" />
+    <Compile Include="gemlib\classification\decisiontree.py" />
+    <Compile Include="gemlib\classification\knn.py" />
+    <Compile Include="gemlib\classification\linearclassifiers.py" />
+    <Compile Include="gemlib\classification\modelvalidation.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gemlib\classification\roccurve.py" />
+    <Compile Include="gemlib\classification\svm.py" />
+    <Compile Include="gemlib\classification\topicmodelling\corpusgenerator.py" />
+    <Compile Include="gemlib\classification\topicmodelling\lda.py" />
+    <Compile Include="gemlib\classification\topicmodelling\lsi.py" />
+    <Compile Include="gemlib\classification\topicmodelling\tweets\preprocess.py" />
+    <Compile Include="gemlib\classification\topicmodelling\tweets\__init__.py" />
+    <Compile Include="gemlib\classification\topicmodelling\__init__.py" />
+    <Compile Include="gemlib\classification\__init__.py" />
+    <Compile Include="gemlib\clustering\clusterers.py" />
+    <Compile Include="gemlib\clustering\__init__.py" />
+    <Compile Include="gemlib\dataloaderlayer\bigdataloader.py" />
+    <Compile Include="gemlib\dataloaderlayer\dataprocessing.py" />
+    <Compile Include="gemlib\dataloaderlayer\filedataloaders.py" />
+    <Compile Include="gemlib\dataloaderlayer\nosqldataloaders.py" />
+    <Compile Include="gemlib\dataloaderlayer\odbcdataloaders.py" />
+    <Compile Include="gemlib\dataloaderlayer\tweeterstreaming.py" />
+    <Compile Include="gemlib\dataloaderlayer\__init__.py" />
+    <Compile Include="gemlib\eda\__init__.py" />
+    <Compile Include="gemlib\featureengineering\featureengineer.py" />
+    <Compile Include="gemlib\featureengineering\__init__.py" />
+    <Compile Include="gemlib\featureselection\__init__.py" />
+    <Compile Include="gemlib\filtering\simple_filter.py" />
+    <Compile Include="gemlib\filtering\__init__.py" />
+    <Compile Include="gemlib\framework\knowledge.py" />
+    <Compile Include="gemlib\framework\knowledgediscovery.py" />
+    <Compile Include="gemlib\framework\pipeline.py" />
+    <Compile Include="gemlib\framework\__init__.py" />
+    <Compile Include="gemlib\gemlibmain.py" />
+    <Compile Include="gemlib\regression\regressors.py" />
+    <Compile Include="gemlib\regression\__init__.py" />
+    <Compile Include="gemlib\validation\inputvalidation.py" />
+    <Compile Include="gemlib\validation\textpreprocessingvalidation.py" />
+    <Compile Include="gemlib\validation\utilities.py" />
+    <Compile Include="gemlib\validation\__init__.py" />
+    <Compile Include="gemlib\version.py" />
+    <Compile Include="gemlib\visualization\barplots.py" />
+    <Compile Include="gemlib\visualization\boxplots.py" />
+    <Compile Include="gemlib\visualization\cmapsetup.py" />
+    <Compile Include="gemlib\visualization\engine.py" />
+    <Compile Include="gemlib\visualization\facetgridplot.py" />
+    <Compile Include="gemlib\visualization\hcaplot.py" />
+    <Compile Include="gemlib\visualization\heatmaps.py" />
+    <Compile Include="gemlib\visualization\hexbins.py" />
+    <Compile Include="gemlib\visualization\histogram.py" />
+    <Compile Include="gemlib\visualization\lineplots.py" />
+    <Compile Include="gemlib\visualization\networkplot.py" />
+    <Compile Include="gemlib\visualization\scatterplotmatrix.py" />
+    <Compile Include="gemlib\visualization\scatterplots.py" />
+    <Compile Include="gemlib\visualization\__init__.py" />
+    <Compile Include="gemlib\__init__.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="gemlib" />
+    <Folder Include="gemlib\abstarct" />
+    <Folder Include="gemlib\classification" />
+    <Folder Include="gemlib\classification\topicmodelling" />
+    <Folder Include="gemlib\classification\topicmodelling\tweets" />
+    <Folder Include="gemlib\clustering" />
+    <Folder Include="gemlib\dataloaderlayer" />
+    <Folder Include="gemlib\eda" />
+    <Folder Include="gemlib\featureengineering" />
+    <Folder Include="gemlib\featureselection" />
+    <Folder Include="gemlib\filtering" />
+    <Folder Include="gemlib\framework" />
+    <Folder Include="gemlib\regression" />
+    <Folder Include="gemlib\validation" />
+    <Folder Include="gemlib\visualization" />
+    <Folder Include="configs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="configs\task1_lda.json" />
+    <Content Include="configs\task1_lsi.json" />
+    <Content Include="configs\task2_lda.json" />
+    <Content Include="configs\task3.json" />
+    <Content Include="configs\test.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>

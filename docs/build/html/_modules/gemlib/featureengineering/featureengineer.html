@@ -1,0 +1,966 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.featureengineering.featureengineer &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>gemlib.featureengineering.featureengineer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for gemlib.featureengineering.featureengineer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">gemlib.abstarct.basefunctionality</span> <span class="kn">import</span> <span class="n">BaseFeatureEngineering</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.text</span> <span class="kn">import</span> <span class="n">Tokenizer</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.preprocessing.sequence</span> <span class="kn">import</span> <span class="n">pad_sequences</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sentence_transformers</span> <span class="kn">import</span> <span class="n">SentenceTransformer</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<div class="viewcode-block" id="embedding"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.embedding">[docs]</a><span class="k">class</span> <span class="nc">embedding</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="embedding.get_word2vec"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.embedding.get_word2vec">[docs]</a>    <span class="k">def</span> <span class="nf">get_word2vec</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;loading word vectors from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="si">}</span><span class="s1"> ...&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.txt&quot;</span><span class="p">:</span>
+            <span class="n">word2vec</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c1"># is just a space-separated text file in the format:</span>
+            <span class="c1"># word vec[0] vec[1] vec[2] ...</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="n">word</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">vec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+                    <span class="n">word2vec</span><span class="p">[</span><span class="n">word</span><span class="p">]</span> <span class="o">=</span> <span class="n">vec</span>
+        <span class="k">elif</span> <span class="n">Path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot;.pkl&quot;</span><span class="p">:</span>
+            <span class="n">word2vec</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embedding_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">))</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;embeddings file should be glove (.txt) or a pickled dictionary as .pkl file&#39;</span><span class="p">)</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;found </span><span class="si">%s</span><span class="s1"> word vectors.&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">word2vec</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">word2vec</span></div>
+
+<div class="viewcode-block" id="embedding.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.embedding.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">Tokenizer</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;tokenizer in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1"> is not of correct type nor existed in resources.&#39;</span><span class="p">)</span>
+        <span class="n">word2idx</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">word_index</span>
+        <span class="n">word2vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_word2vec</span><span class="p">()</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="s1">&#39;filling pre-trained embeddings...&#39;</span><span class="p">)</span>
+        <span class="n">num_words</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_vocab</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">word2idx</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">embedding_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">num_words</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">word</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">word2idx</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_vocab</span><span class="p">:</span>
+                <span class="n">embedding_vector</span> <span class="o">=</span> <span class="n">word2vec</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">embedding_vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># words not found in embedding index will be all zeros.</span>
+                <span class="n">embedding_matrix</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">embedding_vector</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;num tokens not found in embedding: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">embedding_matrix</span><span class="p">]}</span></div></div>
+
+<div class="viewcode-block" id="factorization"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.factorization">[docs]</a><span class="k">class</span> <span class="nc">factorization</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="factorization.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.factorization.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">dict_of_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_mapping</span><span class="p">:</span>
+            <span class="n">_mapping</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_mapping</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+                <span class="n">dict_of_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">_mapping</span> <span class="o">==</span> <span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">dict_of_data</span>
+        <span class="n">factors</span><span class="p">,</span> <span class="n">_mapping</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="n">l_ind</span><span class="p">,</span> <span class="n">up_ind</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="n">l_ind</span><span class="p">,</span> <span class="n">up_ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">l_ind</span> <span class="o">+</span> <span class="n">up_ind</span><span class="p">,</span> <span class="n">up_ind</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">dict_of_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">factors</span><span class="p">[</span><span class="n">l_ind</span><span class="p">:</span> <span class="n">up_ind</span><span class="p">]]</span>
+        <span class="n">dict_of_data</span><span class="p">[</span><span class="s1">&#39;factor_mapping&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">_mapping</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dict_of_data</span></div></div>
+
+<div class="viewcode-block" id="text_encoding"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_encoding">[docs]</a><span class="k">class</span> <span class="nc">text_encoding</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">chunk_size</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">concat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">):</span>
+        <span class="n">BaseFeatureEngineering</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="nb">input</span><span class="p">,</span> <span class="n">concat</span><span class="o">=</span><span class="n">concat</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">column</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="n">chunk_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span><span class="s1">&#39;roberta-large-nli-stsb-mean-tokens&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span><span class="s1">&#39;bert-large-nli-stsb-mean-tokens&#39;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;cpu&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">models</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span><span class="p">:</span><span class="n">SentenceTransformer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">m</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">}</span>
+
+<div class="viewcode-block" id="text_encoding.runner"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_encoding.runner">[docs]</a>    <span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">]</span>
+        <span class="n">all_embeddings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">chunk_size</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">n</span><span class="p">):</span>
+            <span class="n">all_embeddings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">]),</span> <span class="n">show_progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">all_embeddings</span></div>
+
+<div class="viewcode-block" id="text_encoding.get_model"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_encoding.get_model">[docs]</a>    <span class="k">def</span> <span class="nf">get_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">SentenceTransformer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="text_encoding.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_encoding.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">]</span>
+        <span class="n">dict_of_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+                <span class="n">model_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_model</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+                <span class="n">dict_of_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">_model_</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s1">_encode&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">model_</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">model_</span>
+        <span class="k">return</span> <span class="n">dict_of_data</span></div></div>
+
+<div class="viewcode-block" id="train_test_splitting"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.train_test_splitting">[docs]</a><span class="k">class</span> <span class="nc">train_test_splitting</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="train_test_splitting.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.train_test_splitting.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">anzsco_list_tbd</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()[</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">anzsco_list_tbd</span><span class="p">)]])</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_cols</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,),</span>
+                                                          <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+                                                          <span class="n">test_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_ratio</span><span class="p">,</span>
+                                                          <span class="n">stratify</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> 
+                                                          <span class="n">random_state</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;x_train&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">X_train</span><span class="p">],</span> 
+            <span class="s2">&quot;x_test&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">X_test</span><span class="p">],</span> 
+            <span class="s2">&quot;y_train&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">y_train</span><span class="p">],</span> 
+            <span class="s2">&quot;y_test&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">y_test</span><span class="p">]</span>
+        <span class="p">}</span></div></div>
+
+<div class="viewcode-block" id="text_cleaning"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_cleaning">[docs]</a><span class="k">class</span> <span class="nc">text_cleaning</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="text_cleaning.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_cleaning.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Applies simple text cleaning such as removing numbers and punctuations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        df : Dataframe</span>
+<span class="sd">            Input dataframe.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            list of Dataframe (key is preprocessing name) with cleaned text and lowered case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^a-zA-z\s]&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;0&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">df</span><span class="p">]}</span></div></div>
+
+<div class="viewcode-block" id="text_tokenization"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_tokenization">[docs]</a><span class="k">class</span> <span class="nc">text_tokenization</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="text_tokenization.runner"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_tokenization.runner">[docs]</a>    <span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;AI is creating summary for runner</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data ([type]): [description]</span>
+<span class="sd">            tokenizer ([type]): [description]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">MAX_SEQUENCE_LENGTH</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence_lenght</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">]</span>
+        <span class="n">sequences</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">texts_to_sequences</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">pad_sequences</span><span class="p">(</span><span class="n">sequences</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="n">MAX_SEQUENCE_LENGTH</span><span class="p">)</span>
+        <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;shape of data tensor: </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="text_tokenization.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.text_tokenization.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="n">MAX_VOCAB_SIZE</span> <span class="o">=</span> <span class="mi">4000000</span>
+        <span class="n">dict_of_data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="p">[</span><span class="n">df</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">Tokenizer</span><span class="p">):</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">:</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">resolve_caching_load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resources</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">Tokenizer</span><span class="p">(</span><span class="n">num_words</span><span class="o">=</span><span class="n">MAX_VOCAB_SIZE</span><span class="p">)</span>
+            <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit_on_texts</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">word2idx</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">word_index</span>
+            <span class="n">utilities</span><span class="o">.</span><span class="n">_info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">word2idx</span><span class="p">)</span><span class="si">}</span><span class="s1"> unique tokens.&#39;</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+            <span class="n">dict_of_data</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+        <span class="n">dict_of_data</span><span class="p">[</span><span class="s1">&#39;tokenizer&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">dict_of_data</span></div></div>
+
+<div class="viewcode-block" id="one_hot_encoding"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.one_hot_encoding">[docs]</a><span class="k">class</span> <span class="nc">one_hot_encoding</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="one_hot_encoding.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.one_hot_encoding.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">prefix</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="aggregation"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.aggregation">[docs]</a><span class="k">class</span> <span class="nc">aggregation</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">definition</span><span class="p">:</span><span class="nb">dict</span><span class="p">,</span> <span class="n">groupby</span><span class="p">:</span><span class="nb">list</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;AI is creating summary for __init__</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str, optional) : Name of the preprocessing step, by default None </span>
+<span class="sd">            definition (dict, optional) : A dictionary defines preprocessing in a data frame, by default None</span>
+<span class="sd">            groupby (list, optional) : A list of columns to apply the group by, by default None</span>
+<span class="sd">        </span>
+<span class="sd">        Example:</span>
+<span class="sd">            .. code-block:: json</span>
+
+<span class="sd">                {</span>
+<span class="sd">                    &quot;type&quot;: &quot;featureengineering&quot;,</span>
+<span class="sd">                    &quot;process&quot;: &quot;aggregation&quot;,</span>
+<span class="sd">                    &quot;groupby&quot;: [&quot;&lt;list of column names&gt;&quot;]</span>
+<span class="sd">                }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">aggregation</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">definition</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span>
+                                        <span class="n">groupby</span><span class="o">=</span><span class="n">groupby</span><span class="p">,</span>
+                                        <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="aggregation.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.aggregation.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+                    <span class="n">df_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">featurename</span><span class="si">}</span><span class="s1">_m&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;sum&#39;</span><span class="p">:</span>
+                    <span class="n">df_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">featurename</span><span class="si">}</span><span class="s1">_s&#39;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;median&#39;</span><span class="p">:</span>
+                    <span class="n">df_</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">featurename</span><span class="si">}</span><span class="s1">_me&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error: aggregation function: &#39;</span>
+                    <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span><span class="si">}</span><span class="s1"> has not been implemented.&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df_</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">),</span> 
+                                                           <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">featurename</span><span class="si">}</span><span class="s1">_m&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">featurename</span><span class="si">}</span><span class="s1">_m&#39;</span><span class="p">])]</span> <span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> </div></div>
+
+<div class="viewcode-block" id="feature_engineer_regex"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_regex">[docs]</a><span class="k">class</span> <span class="nc">feature_engineer_regex</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_engineer_regex.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_regex.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : </span>
+<span class="sd">                                {</span>
+<span class="sd">                                feature_name : regex,</span>
+<span class="sd">                                feature_name : regex</span>
+<span class="sd">                                }</span>
+<span class="sd">                    column_name : </span>
+<span class="sd">                                {</span>
+<span class="sd">                                feature_name : regex,</span>
+<span class="sd">                                feature_name : regex</span>
+<span class="sd">                                }</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (regex) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">():</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;column </span><span class="si">{}</span><span class="s1"> does not exist in the dataframe!!!, ignored.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">column</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">]:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">],</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (regex) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;modified_dataframe_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_engineer_conditional"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_conditional">[docs]</a><span class="k">class</span> <span class="nc">feature_engineer_conditional</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_engineer_conditional.parse_values"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_conditional.parse_values">[docs]</a>    <span class="k">def</span> <span class="nf">parse_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_float</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_bool</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;true&#39;</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="n">val</span></div>
+
+<div class="viewcode-block" id="feature_engineer_conditional.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_conditional.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    feature_name : [condition, (optional)if True value, (optional)if False value],</span>
+<span class="sd">                    feature_name : [condition, (optional)if True value, (optional)if False value]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (conditional) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">condition</span><span class="p">,</span> <span class="n">true_val</span><span class="p">,</span> <span class="n">false_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_args</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">true_val</span><span class="p">:</span>
+                <span class="n">true_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="n">true_val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">false_val</span><span class="p">:</span>
+                <span class="n">false_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_values</span><span class="p">(</span><span class="n">false_val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">condition</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;feature engineering on </span><span class="si">{}</span><span class="s2"> is ignored!!! condition is missing...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">featurename</span><span class="p">))</span>
+                <span class="k">continue</span>
+            <span class="k">elif</span> <span class="n">true_val</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">false_val</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">],</span> <span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">true_val</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">],</span> <span class="n">true_val</span><span class="p">,</span> <span class="n">false_val</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (conditional) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;modified_dataframe_conditional_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div>
+
+<div class="viewcode-block" id="feature_engineer_conditional.get_args"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_engineer_conditional.get_args">[docs]</a>    <span class="k">def</span> <span class="nf">get_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">list_of_args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">list_of_args</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conditions for feature should be of type list!!!, ignored.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">list_of_args</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">list_of_args</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">list_of_args</span> <span class="o">+</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conditional feature engineering has not been not defined correctly!!!, ignored. &quot;</span> <span class="o">+</span>
+                  <span class="s2">&quot;Help &gt;&gt; feature_name : [condition, (optional)if True value, (optional)if False value]&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="feature_aggregation"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_aggregation">[docs]</a><span class="k">class</span> <span class="nc">feature_aggregation</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_aggregation.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_aggregation.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        :param df:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        groupby : [columns],</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                column_name : </span>
+<span class="sd">                            {</span>
+<span class="sd">                            feature_name : MEAN,</span>
+<span class="sd">                            feature_name : MEDIAN</span>
+<span class="sd">                            }</span>
+<span class="sd">                column_name : </span>
+<span class="sd">                            {</span>
+<span class="sd">                            feature_name : MEAN,</span>
+<span class="sd">                            feature_name : MEDIAN</span>
+<span class="sd">                            }</span>
+<span class="sd">                }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature aggregation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">set</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&quot;groupby&quot; columns are not a subset of dataframe columns. &#39;</span> <span class="o">+</span>
+                  <span class="s1">&#39;ignored!!! columns:</span><span class="si">{}</span><span class="s1"> vs </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="n">df_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">df_temp</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;MEDIAN&#39;</span><span class="p">:</span>
+                    <span class="n">df_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">featurename</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;MEAN&#39;</span><span class="p">:</span>
+                    <span class="n">df_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">featurename</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">featurename</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SUM&#39;</span><span class="p">:</span>
+                    <span class="n">df_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">)[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">featurename</span><span class="p">))</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">df_list</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="o">~</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">duplicated</span><span class="p">()]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepcolumnsvalues</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">df_temp</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keepcolumnsvalues</span><span class="p">:</span>
+                <span class="k">assert</span> <span class="n">df_temp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;keepcolumnsvalues currently only supports file-level metadata&quot;</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_temp</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groupby</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature aggregation </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;aggregated_dataframe_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_value_mapping"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_value_mapping">[docs]</a><span class="k">class</span> <span class="nc">feature_value_mapping</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_value_mapping.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_value_mapping.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param df:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                column_name : {</span>
+<span class="sd">                        to_column_name :  </span>
+<span class="sd">                                {</span>
+<span class="sd">                                oldkey : newkey,</span>
+<span class="sd">                                oldkey : newkey</span>
+<span class="sd">                                }</span>
+<span class="sd">                            },</span>
+<span class="sd">                column_name : {</span>
+<span class="sd">                        to_column_name :  </span>
+<span class="sd">                                {</span>
+<span class="sd">                                oldkey : newkey,</span>
+<span class="sd">                                oldkey : newkey</span>
+<span class="sd">                                }</span>
+<span class="sd">                            }</span>
+<span class="sd">                }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before mapping </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">to_column_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">]:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">old_key</span><span class="p">,</span> <span class="n">new_key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="n">to_column_name</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span> <span class="ow">and</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">new_key</span><span class="p">):</span>
+                        <span class="n">old_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span>
+                        <span class="n">new_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_key</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_bool</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span> <span class="ow">and</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">new_key</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">old_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">]:</span>
+                            <span class="n">old_key</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">elif</span> <span class="n">old_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">]:</span>
+                            <span class="n">old_key</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">new_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_key</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span> <span class="ow">and</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_bool</span><span class="p">(</span><span class="n">new_key</span><span class="p">):</span>
+                        <span class="n">old_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">new_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">]:</span>
+                            <span class="n">new_key</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">elif</span> <span class="n">new_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">]:</span>
+                            <span class="n">new_key</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_bool</span><span class="p">(</span><span class="n">old_key</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">old_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">]:</span>
+                            <span class="n">old_key</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">elif</span> <span class="n">old_key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;False&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">]:</span>
+                            <span class="n">old_key</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">new_key</span><span class="p">):</span>
+                        <span class="n">new_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">new_key</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">utilities</span><span class="o">.</span><span class="n">type_is_int</span><span class="p">(</span><span class="n">old_key</span><span class="p">):</span>
+                        <span class="n">old_key</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">old_key</span><span class="p">)</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_key</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">old_key</span> <span class="k">else</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">to_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after mapping </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_mapped_dataframe.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_value_list_to_string"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_value_list_to_string">[docs]</a><span class="k">class</span> <span class="nc">feature_value_list_to_string</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_value_list_to_string.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_value_list_to_string.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        :param df:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                column_name : to_column_name ,</span>
+<span class="sd">                column_name : to_column_name </span>
+<span class="sd">                }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before list_to_string </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">to_column_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">to_column_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after list_to_string </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;list_to_string_dataframe_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_concat"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_concat">[docs]</a><span class="k">class</span> <span class="nc">feature_concat</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_concat.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_concat.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    feature_name : [column1, column2, ...],</span>
+<span class="sd">                    feature_name : [column1, column2, ...]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="c1"># print(&#39;len before feature engineering (event duration) {}&#39;.format(len(df)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># print(&#39;len after feature engineering (event duration) {}&#39;.format(len(df)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="s1">&#39;modified_dataframe_concat_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_se"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_se">[docs]</a><span class="k">class</span> <span class="nc">feature_se</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_se.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_se.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name]</span>
+<span class="sd">                    column_name : [feature_name, feature_name]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (se) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column1</span><span class="p">,</span> <span class="n">column2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">column1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">column2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column1</span><span class="si">}</span><span class="s1"> or </span><span class="si">{</span><span class="n">column2</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">column2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (se) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_rse.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_abse"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_abse">[docs]</a><span class="k">class</span> <span class="nc">feature_abse</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_abse.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_abse.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name]</span>
+<span class="sd">                    column_name : [feature_name, feature_name]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (abse) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column1</span><span class="p">,</span> <span class="n">column2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">column1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="ow">or</span> <span class="n">column2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column1</span><span class="si">}</span><span class="s1"> or </span><span class="si">{</span><span class="n">column2</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column1</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="n">column2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (abse) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_abse.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_subtract"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_subtract">[docs]</a><span class="k">class</span> <span class="nc">feature_subtract</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_subtract.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_subtract.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (subtract) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">column</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                    <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">-=</span> <span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (subtract) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_subtract.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_sum"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_sum">[docs]</a><span class="k">class</span> <span class="nc">feature_sum</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_sum.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_sum.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        axis : 1</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (sum) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span>\
+                    <span class="nb">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="n">featurename</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (sum) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_sum.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_mean"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_mean">[docs]</a><span class="k">class</span> <span class="nc">feature_mean</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_mean.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_mean.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        axis : 1</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (mean) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span>\
+                    <span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="n">featurename</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (mean) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_mean.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_std"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_std">[docs]</a><span class="k">class</span> <span class="nc">feature_std</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_std.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_std.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        axis : 1</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    column_name : [feature_name, feature_name, ...]</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (std) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span>\
+                    <span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="n">featurename</span><span class="p">},</span> <span class="n">axis</span><span class="o">=</span><span class="s1">&#39;columns&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]]</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (std) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_std.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_square"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_square">[docs]</a><span class="k">class</span> <span class="nc">feature_square</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_square.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_square.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (square) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (square) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_square.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_sqrt"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_sqrt">[docs]</a><span class="k">class</span> <span class="nc">feature_sqrt</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_sqrt.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_sqrt.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (sqrt) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (sqrt) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_sqrt.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+
+<div class="viewcode-block" id="feature_absolute"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_absolute">[docs]</a><span class="k">class</span> <span class="nc">feature_absolute</span><span class="p">(</span><span class="n">BaseFeatureEngineering</span><span class="p">):</span>
+
+<div class="viewcode-block" id="feature_absolute.apply"><a class="viewcode-back" href="../../../gemlib.featureengineering.html#gemlib.featureengineering.featureengineer.feature_absolute.apply">[docs]</a>    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">df</span><span class="p">:</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        adds new features to the dataframe.</span>
+<span class="sd">        :param df: DataFrame, a dataframe.</span>
+<span class="sd">        :return: modified dataframe.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        definition : {</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    column_name : feature_name</span>
+<span class="sd">                    }</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">df</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len before feature engineering (absolute) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">for</span> <span class="n">featurename</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
+            <span class="n">column</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">column</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">utilities</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;Missing defined column(s) </span><span class="si">{</span><span class="n">column</span><span class="si">}</span><span class="s1"> in data.&#39;</span><span class="p">)</span>
+            <span class="n">df</span><span class="p">[</span><span class="n">featurename</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;len after feature engineering (absolute) </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirpath</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ShortFilename&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_absolute.csv&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">df</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

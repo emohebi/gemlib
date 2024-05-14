@@ -1,0 +1,546 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>gemlib.dataloaderlayer package &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib.eda package" href="gemlib.eda.html" />
+    <link rel="prev" title="gemlib.clustering package" href="gemlib.clustering.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_deeplearning.html">Deep Learning Classification</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="gemlib.html">gemlib package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="gemlib.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="gemlib.abstarct.html">gemlib.abstarct package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.classification.html">gemlib.classification package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.clustering.html">gemlib.clustering package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">gemlib.dataloaderlayer package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.bigdataloader">gemlib.dataloaderlayer.bigdataloader module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.dataprocessing">gemlib.dataloaderlayer.dataprocessing module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.filedataloaders">gemlib.dataloaderlayer.filedataloaders module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.nosqldataloaders">gemlib.dataloaderlayer.nosqldataloaders module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.odbcdataloaders">gemlib.dataloaderlayer.odbcdataloaders module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer.tweeterstreaming">gemlib.dataloaderlayer.tweeterstreaming module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-gemlib.dataloaderlayer">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.eda.html">gemlib.eda package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureengineering.html">gemlib.featureengineering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.featureselection.html">gemlib.featureselection package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.filtering.html">gemlib.filtering package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.framework.html">gemlib.framework package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.regression.html">gemlib.regression package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.validation.html">gemlib.validation package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gemlib.visualization.html">gemlib.visualization package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="gemlib.html">gemlib package</a> &raquo;</li>
+        
+      <li>gemlib.dataloaderlayer package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/gemlib.dataloaderlayer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="gemlib-dataloaderlayer-package">
+<h1>gemlib.dataloaderlayer package<a class="headerlink" href="#gemlib-dataloaderlayer-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.bigdataloader">
+<span id="gemlib-dataloaderlayer-bigdataloader-module"></span><h2>gemlib.dataloaderlayer.bigdataloader module<a class="headerlink" href="#module-gemlib.dataloaderlayer.bigdataloader" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.bigdataloader.spark_csv_loader">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.bigdataloader.</code><code class="sig-name descname">spark_csv_loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sc</span></em>, <em class="sig-param"><span class="n">path</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/bigdataloader.html#spark_csv_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.bigdataloader.spark_csv_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.bigdataloader.spark_csv_loader.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/bigdataloader.html#spark_csv_loader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.bigdataloader.spark_csv_loader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.dataprocessing">
+<span id="gemlib-dataloaderlayer-dataprocessing-module"></span><h2>gemlib.dataloaderlayer.dataprocessing module<a class="headerlink" href="#module-gemlib.dataloaderlayer.dataprocessing" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.dataprocessing.data_concat">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.dataprocessing.</code><code class="sig-name descname">data_concat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/dataprocessing.html#data_concat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.dataprocessing.data_concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.dataprocessing.data_concat.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/dataprocessing.html#data_concat.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.dataprocessing.data_concat.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.dataprocessing.data_joiner">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.dataprocessing.</code><code class="sig-name descname">data_joiner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/dataprocessing.html#data_joiner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.dataprocessing.data_joiner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.dataprocessing.data_joiner.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/dataprocessing.html#data_joiner.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.dataprocessing.data_joiner.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.filedataloaders">
+<span id="gemlib-dataloaderlayer-filedataloaders-module"></span><span id="dataloader-ref"></span><h2>gemlib.dataloaderlayer.filedataloaders module<a class="headerlink" href="#module-gemlib.dataloaderlayer.filedataloaders" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.filedataloaders.data_loader">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.filedataloaders.</code><code class="sig-name descname">data_loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/filedataloaders.html#data_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.filedataloaders.data_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.filedataloaders.data_loader.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/filedataloaders.html#data_loader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.filedataloaders.data_loader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.filedataloaders.data_loader.read_file">
+<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filepath</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/filedataloaders.html#data_loader.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.filedataloaders.data_loader.read_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.nosqldataloaders">
+<span id="gemlib-dataloaderlayer-nosqldataloaders-module"></span><h2>gemlib.dataloaderlayer.nosqldataloaders module<a class="headerlink" href="#module-gemlib.dataloaderlayer.nosqldataloaders" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.odbcdataloaders">
+<span id="gemlib-dataloaderlayer-odbcdataloaders-module"></span><h2>gemlib.dataloaderlayer.odbcdataloaders module<a class="headerlink" href="#module-gemlib.dataloaderlayer.odbcdataloaders" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.odbcdataloaders.sql_data_loader">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.odbcdataloaders.</code><code class="sig-name descname">sql_data_loader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">connection_string</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/odbcdataloaders.html#sql_data_loader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.odbcdataloaders.sql_data_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.odbcdataloaders.sql_data_loader.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/odbcdataloaders.html#sql_data_loader.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.odbcdataloaders.sql_data_loader.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer.tweeterstreaming">
+<span id="gemlib-dataloaderlayer-tweeterstreaming-module"></span><h2>gemlib.dataloaderlayer.tweeterstreaming module<a class="headerlink" href="#module-gemlib.dataloaderlayer.tweeterstreaming" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.tweeterstreaming.</code><code class="sig-name descname">StdOutListener</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">api</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#StdOutListener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tweepy.streaming.StreamListener</span></code></p>
+<p>A listener handles tweets that are received from the stream.
+This is a basic listener that just prints received tweets to stdout.</p>
+<dl class="py attribute">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.counter">
+<code class="sig-name descname">counter</code><em class="property"> = 0</em><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.counter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.list_tweets">
+<code class="sig-name descname">list_tweets</code><em class="property"> = []</em><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.list_tweets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_error">
+<code class="sig-name descname">on_error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">status_code</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#StdOutListener.on_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a non-200 status code is returned</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_status">
+<code class="sig-name descname">on_status</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tweet</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#StdOutListener.on_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.on_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when a new status arrives</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.streamfilename">
+<code class="sig-name descname">streamfilename</code><em class="property"> = ''</em><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.streamfilename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.tweet_count_threshold">
+<code class="sig-name descname">tweet_count_threshold</code><em class="property"> = 1000</em><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.StdOutListener.tweet_count_threshold" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer">
+<em class="property">class </em><code class="sig-prename descclassname">gemlib.dataloaderlayer.tweeterstreaming.</code><code class="sig-name descname">TweetStreamer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span><span class="p">:</span> <span class="n">str</span></em>, <em class="sig-param"><span class="n">hold_on</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">head</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>bool<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dtypes</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">definition</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">validpreprocessing</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">port</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">concat</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">joinon</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">suffix</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">how</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fillna</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>dict<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_na</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>list<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cache</span><span class="p">:</span> <span class="n">bool</span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_rows</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sheet_name</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>str<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#TweetStreamer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="gemlib.abstarct.html#gemlib.abstarct.basefunctionality.BaseDataLoader" title="gemlib.abstarct.basefunctionality.BaseDataLoader"><code class="xref py py-class docutils literal notranslate"><span class="pre">gemlib.abstarct.basefunctionality.BaseDataLoader</span></code></a></p>
+<p>Abstract class of data loader.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to a data directory or single file.</p></li>
+<li><p><strong>hold_on</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data points to be kept in data. <code class="docutils literal notranslate"><span class="pre">head</span></code> should be set. Defaults to None.</p></li>
+<li><p><strong>head</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> then the data will be trimmed from head. Defaults to None.</p></li>
+<li><p><strong>exclude</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of data to be excluded from data. ‘head’ should be set. Defaults to None.</p></li>
+<li><p><strong>dtypes</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary of data types in a data frame. i.e. {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">int</span></code>}. Defaults to None.</p></li>
+<li><p><strong>definition</strong> (<em>dict</em><em>, </em><em>optional</em>) – Dictionary in the format of {<code class="docutils literal notranslate"><span class="pre">&lt;new_col_name&gt;</span></code>:<code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to define new columns to data having constant value of &lt;value&gt;. Defaults to None.</p></li>
+<li><p><strong>validpreprocessing</strong> (<em>gemlib.preprocessing</em><em>, </em><em>optional</em>) – A gemlib preprocessing block attached to the data loader. Defaults to None.</p></li>
+<li><p><strong>port</strong> (<em>int</em><em>, </em><em>optional</em>) – Port number to connect to the data source. Defaults to None.</p></li>
+<li><p><strong>concat</strong> (<em>bool</em><em>, </em><em>optional</em>) – If set to <code class="docutils literal notranslate"><span class="pre">True</span></code> then all the files in the directory will be concatinated along <code class="docutils literal notranslate"><span class="pre">axis=0</span></code>. Defaults to None.</p></li>
+<li><p><strong>joinon</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to join the datasets on [<code class="docutils literal notranslate"><span class="pre">&lt;left_data_col&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;right_data_col&gt;</span></code>]. Defaults to None.</p></li>
+<li><p><strong>suffix</strong> (<em>str</em><em>, </em><em>optional</em>) – Data file fromat (<code class="docutils literal notranslate"><span class="pre">.csv</span></code> or <code class="docutils literal notranslate"><span class="pre">.xlsx</span></code>).</p></li>
+<li><p><strong>how</strong> (<em>str</em><em>, </em><em>optional</em>) – The way that join should be run (left, right ,…). Defaults to None.</p></li>
+<li><p><strong>fillna</strong> (<em>dict</em><em>, </em><em>optional</em>) – A dictionary of the format {<code class="docutils literal notranslate"><span class="pre">&lt;col_name&gt;</span></code>: <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>} to fill <code class="docutils literal notranslate"><span class="pre">nulls</span></code> by <code class="docutils literal notranslate"><span class="pre">&lt;value&gt;</span></code>. Defaults to None.</p></li>
+<li><p><strong>drop_na</strong> (<em>list</em><em>, </em><em>optional</em>) – A list of columns to drop nulls. Defaults to None.</p></li>
+<li><p><strong>cache</strong> (<em>bool</em><em>, </em><em>optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> the the data will be kept in the memory. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the data loader. Defaults to None.</p></li>
+<li><p><strong>num_rows</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of rows to load from data file. Defaults to None.</p></li>
+<li><p><strong>sheet_name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of spread sheet in an excel file. Defaults to None.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.create_output_header">
+<code class="sig-name descname">create_output_header</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#TweetStreamer.create_output_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.create_output_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#TweetStreamer.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a source file and return the contents as a pandas dataframe</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.start_stream">
+<code class="sig-name descname">start_stream</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">auth</span></em>, <em class="sig-param"><span class="n">listener</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#TweetStreamer.start_stream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.start_stream" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.stream_runner">
+<code class="sig-name descname">stream_runner</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gemlib/dataloaderlayer/tweeterstreaming.html#TweetStreamer.stream_runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gemlib.dataloaderlayer.tweeterstreaming.TweetStreamer.stream_runner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gemlib.dataloaderlayer">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gemlib.dataloaderlayer" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.eda.html" class="btn btn-neutral float-right" title="gemlib.eda package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="gemlib.clustering.html" class="btn btn-neutral float-left" title="gemlib.clustering package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

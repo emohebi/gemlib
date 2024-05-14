@@ -1,0 +1,75 @@
+{
+  "cwd": "../../dbfs/mnt/general-purpose/Scratch/Ehsan/JobTItle_to_ANZSCO_classification/algo_run_trans",
+  "data": {
+    "BG1": {
+      "type": "csv",
+      "path": "../../dbfs/mnt/general-purpose/Scratch/Ehsan/JobTItle_to_ANZSCO_classification/data/bg_flow_09.02.2021_jobtitles.csv",
+      "drop_na": ["TITLE", "ANZSCO_CODE"],
+      "preprocessing": {
+        "P1":{
+            "input": "BG1",
+            "process": "featureengineering",
+            "type": "text_cleaning",
+            "columns": ["TITLE"]
+        },
+        "P2":{
+          "input": "BG1_P1_0",
+          "process": "featureengineering",
+          "type": "train_test_split",
+          "x_cols": ["TITLE"],
+          "y_col": "ANZSCO_CODE",
+          "test_ratio": 0.2
+        },
+        "P3":{
+          "input": ["BG1_P2_y_train", "BG1_P2_y_test"],
+          "process": "featureengineering",
+          "type": "factorization",
+          "concat": "false"
+        }
+      }
+    }
+  },
+  "preprocessing": {
+    "P1":{
+      "input": ["BG1_P2_x_train", "BG1_P2_x_test"],
+      "process": "featureengineering",
+      "type": "text_tokenization",
+      "sequence_length": 10, 
+      "concat": "false"
+    },
+    "P2":{
+      "input": ["BG1_P2_x_train", "BG1_P2_x_test"],
+      "process": "featureengineering",
+      "type": "text_encoding",
+      "chunk_size": 300000,
+      "concat": "false"
+    }
+  },
+  "tasks": {
+    "T1": {
+      "cwd": "../../dbfs/mnt/general-purpose/Scratch/Ehsan/JobTItle_to_ANZSCO_classification/algo_run_trans/dl_classification",
+      "type": "classification",
+      "algorithm": "deeplearning",
+      "model_name": "dl_ff_lstm_cnn",
+      "mode": "training",
+      "x_train": ["P1_0", "P1_0", "P2_0_model_1_encode", "P2_0_model_3_encode"],
+      "y_train": "BG1_P3_0",
+      "x_test": ["P1_1", "P1_1", "P2_1_model_1_encode", "P2_1_model_3_encode"],
+      "y_test": "BG1_P3_1",
+      "embedding_matrix": "T1_embedding_1_0",
+      "epoch": 1000,
+      "batch_size": 512,
+      "sequence_length": 10,       
+      "preprocessing": {
+          "embedding_1": {
+            "process": "featureengineering",
+            "type": "embedding",
+            "embedding_dim": 1024,
+            "embedding_path": "../../dbfs/mnt/general-purpose/Scratch/Ehsan/JobTItle_to_ANZSCO_classification/embeddings/x_train_word_embeddings_90k.pkl",
+            "num_vocabs": 400000,
+            "tokenizer": "P1_tokenizer"
+          }
+      }
+    }
+  }
+}

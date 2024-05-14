@@ -1,0 +1,467 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Deep Learning Classification &mdash; gemlib 1.2.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="gemlib package" href="gemlib.html" />
+    <link rel="prev" title="Using Dataloader" href="user_dataloader.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> gemlib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="user_dataloader.html">Using Dataloader</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Deep Learning Classification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#dl-ff-lstm-cnn-model"><code class="docutils literal notranslate"><span class="pre">dl_ff_lstm_cnn</span></code> model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-a-pipeline">Using a pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#outside-a-pipeline">Outside a pipeline</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gemlib.html">gemlib package</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gemlib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Deep Learning Classification</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/user_deeplearning.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="deep-learning-classification">
+<h1>Deep Learning Classification<a class="headerlink" href="#deep-learning-classification" title="Permalink to this headline">¶</a></h1>
+<p>The deep learnig models in <code class="docutils literal notranslate"><span class="pre">gemlib</span></code> library can be called using a pre-defined names. The first model is called <code class="docutils literal notranslate"><span class="pre">dl_ff_lstm_cnn</span></code>.</p>
+<div class="section" id="dl-ff-lstm-cnn-model">
+<h2><code class="docutils literal notranslate"><span class="pre">dl_ff_lstm_cnn</span></code> model<a class="headerlink" href="#dl-ff-lstm-cnn-model" title="Permalink to this headline">¶</a></h2>
+<p>The model is a hybrid deep learning model consist of feed-forward, cnn and lstm layers. The architecture of the model is presented in
+below figure.</p>
+<div class="align-center figure">
+<a class="reference internal image-reference" href="_images/dl_ff_lstm_cnn.png"><img alt="alternate text" src="_images/dl_ff_lstm_cnn.png" style="width: 294.7px; height: 332.84999999999997px;" /></a>
+</div>
+<p>The deep learning classification in the <code class="docutils literal notranslate"><span class="pre">classification</span></code> class can be called based on two scenarios, <cite>using a pipeline</cite> or
+<cite>outside a pipeline</cite>.</p>
+<div class="section" id="using-a-pipeline">
+<h3>Using a pipeline<a class="headerlink" href="#using-a-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>The models can be trained/validated by calling the <cite>gemlib</cite> cmd using a pipeline (json/yaml) file as an input:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ gemlib -i &lt;path to input json file&gt;
+</pre></div>
+</div>
+<p>Example of input pipeline for training a <code class="docutils literal notranslate"><span class="pre">dl_ff_lstm_cnn</span></code> model:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;cwd&quot;</span><span class="p">:</span> <span class="s2">&quot;C:/Users/EM2945/Documents/CWD/test_gemlib_1k&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;BG1&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;C:/Users/em2945/Documents/Data/bg_flow_18.01.2021_jobtitles_min.csv&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;drop_na&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">,</span> <span class="s2">&quot;ANZSCO_CODE&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;num_rows&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="nt">&quot;preprocessing&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;P1&quot;</span><span class="p">:{</span>
+                    <span class="nt">&quot;input&quot;</span><span class="p">:</span> <span class="s2">&quot;BG1&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text_cleaning&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;columns&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">]</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;P2&quot;</span><span class="p">:{</span>
+                    <span class="nt">&quot;input&quot;</span><span class="p">:</span> <span class="s2">&quot;BG1_P1_0&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;train_test_split&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;x_cols&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;TITLE&quot;</span><span class="p">],</span>
+                    <span class="nt">&quot;y_col&quot;</span><span class="p">:</span> <span class="s2">&quot;ANZSCO_CODE&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;test_ratio&quot;</span><span class="p">:</span> <span class="mf">0.2</span>
+                <span class="p">},</span>
+                <span class="nt">&quot;P3&quot;</span><span class="p">:{</span>
+                    <span class="nt">&quot;input&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;BG1_P2_y_train&quot;</span><span class="p">,</span> <span class="s2">&quot;BG1_P2_y_test&quot;</span><span class="p">],</span>
+                    <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;factorization&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;preprocessing&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;P1&quot;</span><span class="p">:{</span>
+            <span class="nt">&quot;input&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;BG1_P2_x_train&quot;</span><span class="p">,</span> <span class="s2">&quot;BG1_P2_x_test&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text_tokenization&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;sequence_length&quot;</span><span class="p">:</span> <span class="mi">10</span>
+        <span class="p">},</span>
+        <span class="nt">&quot;P2&quot;</span><span class="p">:{</span>
+            <span class="nt">&quot;input&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;BG1_P2_x_train&quot;</span><span class="p">,</span> <span class="s2">&quot;BG1_P2_x_test&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text_encoding&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;chunk_size&quot;</span><span class="p">:</span> <span class="mi">300</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nt">&quot;tasks&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="nt">&quot;T1&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="nt">&quot;cwd&quot;</span><span class="p">:</span> <span class="s2">&quot;C:/Users/EM2945/Documents/CWD/test_gemlib_1k/dl_classification&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;algorithm&quot;</span><span class="p">:</span> <span class="s2">&quot;deeplearning&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;model_name&quot;</span><span class="p">:</span> <span class="s2">&quot;dl_ff_lstm_cnn&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;training&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;x_train&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1_0&quot;</span><span class="p">,</span> <span class="s2">&quot;P1_0&quot;</span><span class="p">,</span> <span class="s2">&quot;P2_0_model_1_encode&quot;</span><span class="p">,</span> <span class="s2">&quot;P2_0_model_3_encode&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;y_train&quot;</span><span class="p">:</span> <span class="s2">&quot;BG1_P3_0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;x_test&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P1_1&quot;</span><span class="p">,</span> <span class="s2">&quot;P1_1&quot;</span><span class="p">,</span> <span class="s2">&quot;P2_1_model_1_encode&quot;</span><span class="p">,</span> <span class="s2">&quot;P2_1_model_3_encode&quot;</span><span class="p">],</span>
+            <span class="nt">&quot;y_test&quot;</span><span class="p">:</span> <span class="s2">&quot;BG1_P3_1&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;embedding_matrix&quot;</span><span class="p">:</span> <span class="s2">&quot;T1_embedding_1_0&quot;</span><span class="p">,</span>
+            <span class="nt">&quot;epoch&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="nt">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">512</span><span class="p">,</span>
+            <span class="nt">&quot;sequence_length&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="nt">&quot;preprocessing&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="nt">&quot;embedding_1&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="nt">&quot;process&quot;</span><span class="p">:</span> <span class="s2">&quot;featureengineering&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;embedding&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;embedding_dim&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
+                    <span class="nt">&quot;embedding_path&quot;</span><span class="p">:</span> <span class="s2">&quot;C:/Users/em2945/Documents/JobTitle_to_ANZSCO_Classification/pickled/x_train_word_embeddings.pkl&quot;</span><span class="p">,</span>
+                    <span class="nt">&quot;num_vocabs&quot;</span><span class="p">:</span> <span class="mi">400000</span><span class="p">,</span>
+                    <span class="nt">&quot;tokenizer&quot;</span><span class="p">:</span> <span class="s2">&quot;P1_tokenizer&quot;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All the intermediate artefacts will be staged in <code class="docutils literal notranslate"><span class="pre">cwd</span></code>. A <code class="docutils literal notranslate"><span class="pre">resources.json</span></code> file as key-value pair will be generated,
+where <code class="docutils literal notranslate"><span class="pre">key</span></code> is unique based on the keys in input file and values are the uri to the artefacts.
+An Example of output <code class="docutils literal notranslate"><span class="pre">resources.json</span></code> file:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;BG1&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\data\\BG1_0.csv&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P1_0&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P1_0_0.csv&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P2_x_train&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P2_x_train_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P2_x_test&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P2_x_test_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P2_y_train&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P2_y_train_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P2_y_test&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P2_y_test_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P3_0&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P3_0_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P3_1&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P3_1_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;BG1_P3_factor_mapping&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\BG1_P3_factor_mapping_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P1_0&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P1_0_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P1_1&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P1_1_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P1_tokenizer&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P1_tokenizer_0.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P2_0_model_1_encode&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_0.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_1.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_2.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_3.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_4.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_5.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_1_encode_6.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P2_1_model_1_encode&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_1_model_1_encode_0.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_1_model_1_encode_1.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P2_0_model_3_encode&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_0.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_1.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_2.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_3.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_4.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_5.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_0_model_3_encode_6.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;P2_1_model_3_encode&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_1_model_3_encode_0.pkl&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\P2_1_model_3_encode_1.pkl&quot;</span>
+    <span class="p">],</span>
+    <span class="nt">&quot;T1_embedding_1_0&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;C:\\Users\\EM2945\\Documents\\CWD\\algo_run_trans\\preprocessing\\T1_embedding_1_0_0.pkl&quot;</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="outside-a-pipeline">
+<h3>Outside a pipeline<a class="headerlink" href="#outside-a-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>Deep learning classification can be intialized and run outside a pipeline. The input data should be prepared before
+passing it into the training fucntion.</p>
+<p>Example of training a <code class="docutils literal notranslate"><span class="pre">dl_ff_lstm_cnn</span></code> model:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">gemlib.validation</span> <span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">from</span> <span class="nn">gemlib.classification.deeplearning</span> <span class="kn">import</span> <span class="n">DeepLearning</span>
+<span class="kn">from</span> <span class="nn">gemlib.featureengineering.featureengineer</span> <span class="kn">import</span> <span class="n">text_tokenization</span><span class="p">,</span> <span class="n">text_encoding</span>
+<span class="kn">from</span> <span class="nn">gemlib.featureengineering.featureengineer</span> <span class="kn">import</span> <span class="n">train_test_splitting</span><span class="p">,</span> <span class="n">factorization</span>
+
+<span class="c1"># get train data from df (pandas dataframe)</span>
+<span class="n">train_data</span> <span class="o">=</span> <span class="n">train_test_splitting</span><span class="p">(</span><span class="n">x_cols</span><span class="o">=</span><span class="n">x_col</span><span class="p">,</span> <span class="n">y_col</span><span class="o">=</span><span class="n">y_col</span><span class="p">,</span> <span class="n">test_ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">data_dict</span> <span class="o">=</span> <span class="n">train_data</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># text tokenization</span>
+<span class="n">text_token</span> <span class="o">=</span> <span class="n">text_tokenization</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">x_col</span><span class="p">,</span> <span class="n">sequence_lenght</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">token_dict</span> <span class="o">=</span> <span class="n">text_token</span><span class="o">.</span><span class="n">apply</span><span class="p">([</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x_test&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="c1"># text encoding using bert models</span>
+<span class="n">text_encode</span> <span class="o">=</span> <span class="n">text_encoding</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">x_col</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">data_encode</span> <span class="o">=</span> <span class="n">text_encode</span><span class="o">.</span><span class="n">apply</span><span class="p">([</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x_train&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;x_test&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="c1"># target factorization</span>
+<span class="n">factorize</span> <span class="o">=</span> <span class="n">factorization</span><span class="p">()</span>
+<span class="n">data_y</span> <span class="o">=</span> <span class="n">factorize</span><span class="o">.</span><span class="n">apply</span><span class="p">([</span><span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y_train&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data_dict</span><span class="p">[</span><span class="s1">&#39;y_test&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="p">[</span><span class="n">token_dict</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+           <span class="n">token_dict</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+           <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;0_model_1_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+           <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;0_model_3_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
+
+<span class="n">x_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">token_dict</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+          <span class="n">token_dict</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;1_model_1_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+          <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;1_model_3_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)]</span>
+
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">]</span>
+<span class="n">y_test</span> <span class="o">=</span> <span class="n">data_y</span><span class="p">[</span><span class="s1">&#39;1&#39;</span><span class="p">]</span>
+
+<span class="c1"># initializes the deep learnig model</span>
+<span class="n">dl</span> <span class="o">=</span> <span class="n">DeepLearning</span><span class="p">(</span><span class="n">x_train</span><span class="o">=</span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="o">=</span><span class="n">x_test</span><span class="p">,</span>
+                <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span><span class="o">=</span><span class="n">y_test</span><span class="p">,</span>
+                <span class="n">sequence_lenght</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">embedding_matrix</span><span class="o">=</span><span class="s1">&#39;T1_embedding_1_0&#39;</span><span class="p">,</span>
+                <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;dl_ff_lstm_cnn&#39;</span><span class="p">,</span>
+                <span class="n">epoch</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">dirpath</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\em2945\Documents\CWD\test_gemlib&quot;</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span> <span class="c1"># initializes the model &#39;dl_ff_lstm_cnn&#39;</span>
+<span class="n">dl</span><span class="o">.</span><span class="n">run_training</span><span class="p">()</span> <span class="c1"># train the model</span>
+</pre></div>
+</div>
+<p>The validation can be done in the same way if we have trained a model beforehand. The sample code block presented below
+validate the model against any dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># loading the dictioanry of resources</span>
+<span class="n">resources_path</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\em2945\Documents\CWD\test_gemlib\resources.json&quot;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">resources_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">resources</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="c1"># tokenization of validation dataset</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="s1">&#39;P1_tokenizer&#39;</span> <span class="c1"># tokenizer in resources</span>
+<span class="n">text_token</span> <span class="o">=</span> <span class="n">text_tokenization</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="n">x_col</span><span class="p">,</span> <span class="n">sequence_lenght</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">text_token</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span>
+<span class="n">data_token</span> <span class="o">=</span> <span class="n">text_token</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">)[</span><span class="s1">&#39;0&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># encoding the text</span>
+<span class="n">text_encode</span> <span class="o">=</span> <span class="n">text_encoding</span><span class="p">(</span><span class="n">column</span><span class="o">=</span><span class="n">x_col</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+<span class="n">data_encode</span> <span class="o">=</span> <span class="n">text_encode</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="n">data_encode_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;0_model_1_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">data_encode_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">data_encode</span><span class="p">[</span><span class="s1">&#39;0_model_3_encode&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># loading the trained deep learning model</span>
+<span class="n">dl_cls</span> <span class="o">=</span> <span class="n">DeepLearning</span><span class="p">(</span>
+                  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;testing&#39;</span><span class="p">,</span>
+                  <span class="n">model_path</span><span class="o">=</span><span class="sa">r</span><span class="s2">&quot;C:\Users\em2945\Documents\CWD\test_gemlib\dl_classification\T1_dl_ff_lstm_cnn_model&quot;</span><span class="p">)</span>
+<span class="n">dl_cls</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="n">resources</span>
+<span class="n">dl_cls</span><span class="o">.</span><span class="n">get_model</span><span class="p">()</span>
+<span class="n">dl_cls</span><span class="o">.</span><span class="n">x_test</span> <span class="o">=</span> <span class="p">[</span><span class="n">data_token</span><span class="p">,</span> <span class="n">data_token</span><span class="p">,</span> <span class="n">data_encode_1</span><span class="p">,</span> <span class="n">data_encode_2</span><span class="p">]</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">dl_cls</span><span class="o">.</span><span class="n">run_testing</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="gemlib.html" class="btn btn-neutral float-right" title="gemlib package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="user_dataloader.html" class="btn btn-neutral float-left" title="Using Dataloader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Ehsan Mohebi.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
